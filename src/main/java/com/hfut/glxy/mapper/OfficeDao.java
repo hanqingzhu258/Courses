@@ -29,7 +29,7 @@ public interface OfficeDao {
          * @since JDK 1.8
          * @condition  根据id获取课程介绍：课程大纲、教学日历、考核方式与标准、学习指南
     */
-    @Select("select * from office where id=#{id} and isDelete=0")
+    @Select("select * from office where id=#{id}")
     Office queryOfficeById(@Param("id") String id);
 
 

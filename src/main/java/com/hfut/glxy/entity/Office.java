@@ -41,25 +41,25 @@ public class Office extends Model<Office>{
 
     private Date createTime;
 
-    private Date updateTime;
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    private int isDelete;
-
-    public int getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(int isDelete) {
-        this.isDelete = isDelete;
-    }
+//    private Date updateTime;
+//
+//    public Date getUpdateTime() {
+//        return updateTime;
+//    }
+//
+//    public void setUpdateTime(Date updateTime) {
+//        this.updateTime = updateTime;
+//    }
+//
+//    private int isDelete;
+//
+//    public int getIsDelete() {
+//        return isDelete;
+//    }
+//
+//    public void setIsDelete(int isDelete) {
+//        this.isDelete = isDelete;
+//    }
 
     public Integer getId() {
         return id;
