@@ -45,7 +45,11 @@ public class InforServiceImpl implements InforService {
     @Resource
     private Course_PictureDao course_pictureDao;
     @Resource
+    private ChapterDao chapterDao;
+    @Resource
     private ChapterService chapterService;
+    @Resource
+    private Chapter_UnitDao chapter_unitDao;
     @Resource
     private UnitService unitService;
     @Resource
@@ -54,6 +58,14 @@ public class InforServiceImpl implements InforService {
     private OfficeDao officeDao;
     @Resource
     private Course_OfficeDao _courseOfficeDao;
+    @Resource
+    private VideoDao videoDao;
+    @Resource
+    private Unit_VideoDao unit_videoDao;
+    @Resource
+    private UnitDao unitDao;
+    @Resource
+    private Unit_OfficeDao unit_officeDao;
     /**
      *
      * @Date 2017/12/6 15:26
@@ -281,7 +293,7 @@ public class InforServiceImpl implements InforService {
         }
         map.put("teacherDetail",teachers);
 
-        List<KnowledgePoint> knowledgePoints;
+        List<KnowledgePoint> knowledgePoints;//所有知识点
         knowledgePoints=knowledgePointService.getKnowledgePointsByCourse(course_id);
         map.put("knowledgePoints",knowledgePoints);
 
@@ -335,5 +347,103 @@ public class InforServiceImpl implements InforService {
 
         return map;
     }
+
+    /**   
+         * 
+         * @Date 2018/1/11 14:01
+         * @author students_ManagementSchool
+         * @param unit_id
+         * @return
+         * @since JDK 1.8
+         * @condition  获取某一教学单元的详细信息
+    */
+    @Override
+    public Map getUnitDetail(String unit_id) throws Exception{
+
+        Map map=new HashMap();//存放详细信息
+
+        Unit unit;
+        unit=unitDao.queryUnitById(unit_id);
+        if (unit==null){
+            throw new RuntimeException("单元为空");
+        }
+        map.put("unit",unit);//存放教学单元基本信息
+
+        List<Video> videos=new ArrayList<>();
+        String [] video_ids;
+        video_ids=unit_videoDao.getVideosByUnit(unit_id);
+        if (video_ids==null){
+
+        }else{
+            for (String video_id:video_ids){
+                Video video=videoDao.queryVideoById(video_id);
+                if (video==null){
+                    throw new RuntimeException("视频不存在");
+                }
+                videos.add(video);
+            }
+        }
+        map.put("videos",videos);//存放视频信息
+
+        List<KnowledgePoint> knowledgePoints;
+        knowledgePoints=knowledgePointService.getKnowledgePointsByUnit(unit_id);
+        map.put("knowledgePoints",knowledgePoints);//存放知识点信息
+
+        List<Office> offices=new ArrayList<>();
+        String [] office_ids=unit_officeDao.getOfficesByUnit(unit_id);
+        if (office_ids==null){
+
+        }else{
+            for(String office_id:office_ids){
+                Office office=officeDao.queryOfficeById(office_id);
+                if (office==null){
+                    throw new RuntimeException("资料不存在");
+                }
+                offices.add(office);
+            }
+        }
+        map.put("offices",offices);//存放资料信息
+
+        String chapter_id=chapter_unitDao.getChapterByUnit(unit_id);
+        if (chapter_id==null){
+            throw new RuntimeException("章不存在，未知错误");
+        }
+        Chapter chapter=chapterDao.queryChapterById(chapter_id);
+        if (chapter==null){
+            throw new RuntimeException("章不存在，未知错误");
+        }
+        map.put("chapter",chapter);
+
+        List<Map> videos_chapter=new ArrayList<>();
+        String[] unit_ids=chapter_unitDao.getUnitsByChapter(chapter_id);
+        for(String unitId:unit_ids){
+            Map mapV=new HashMap();//存放每章的视频信息
+
+            Unit unitV=unitDao.queryUnitById(unitId);
+            mapV.put("unit",unit);//存放某教学单元视频
+
+
+            String [] videoIds=unit_videoDao.getVideosByUnit(unitId);
+            if (videoIds==null){
+
+            }else{
+                List<Video> videosV=new ArrayList<>();
+                for (String videoId:videoIds){
+                    Video video=videoDao.queryVideoById(videoId);
+                    if (video==null){
+                        throw new RuntimeException("视频又不存在");
+                    }
+                    videosV.add(video);
+                }
+                mapV.put("videos",videosV);
+            }
+
+            videos_chapter.add(mapV);
+        }
+        map.put("videos_chapter",videos_chapter);
+
+        return map;
+    }
+
 
 }

@@ -56,4 +56,16 @@ public interface Chapter_UnitDao {
     */
     @Select("select unit_id from chapter_unit where chapter_id=#{chapter_id} and isDelete=0")
     String [] getUnitsByChapter(@Param("chapter_id") String chapter_id);
+
+    /**   
+         * 
+         * @Date 2018/1/11 14:20
+         * @author students_ManagementSchool
+         * @param unit_id
+         * @return
+         * @since JDK 1.8
+         * @condition  获取教学单元所在章
+    */
+    @Select("select chapter_id from chapter_unit where unit_id=#{unit_id} and isDelete=0")
+    String getChapterByUnit(@Param("unit_id") String unit_id);
 }

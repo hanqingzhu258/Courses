@@ -1,10 +1,7 @@
 package com.hfut.glxy.controller;
 
 import com.hfut.glxy.dto.Result;
-import com.hfut.glxy.entity.Course;
-import com.hfut.glxy.entity.CourseGroup;
-import com.hfut.glxy.entity.Picture;
-import com.hfut.glxy.entity.Teacher;
+import com.hfut.glxy.entity.*;
 import com.hfut.glxy.mapper.PictureDao;
 import com.hfut.glxy.service.InforService;
 import org.springframework.stereotype.Controller;
@@ -198,5 +195,37 @@ public class InforController {
         }
 
         return new Result<>(true,"获取成功",map);
+    }
+
+    /**   
+         * 
+         * @Date 2018/1/11 14:35
+         * @author students_ManagementSchool
+         * @param unit
+         * @return
+         * @since JDK 1.8
+         * @condition  获取某一教学单元的详细信息
+    */
+    @ResponseBody
+    @RequestMapping(value = "/getUnitDetail",method = RequestMethod.POST)
+    public Result<Map> getUnitDetail(@RequestBody Unit unit){
+
+        String unit_id=unit.getId();
+
+        if (unit_id==null||unit_id.trim().isEmpty()){
+            return new Result<>(false,"参数错误",null);
+        }
+
+        Map map;
+
+        try{
+            map=inforService.getUnitDetail(unit_id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result<>(false,"数据获取异常",null);
+        }
+
+        return new Result<>(true,"获取成功",map);
+
     }
 }

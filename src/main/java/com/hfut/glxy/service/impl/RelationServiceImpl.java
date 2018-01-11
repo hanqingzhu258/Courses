@@ -188,7 +188,7 @@ public class RelationServiceImpl implements RelationService{
     @Transactional
     public Integer updateRelation_teacher_course(Course course) throws Exception{
 
-        int isSuccess=0;
+        int isSuccess;
 
         String courseGroup_id=course.getCourseGroup_id();
         String course_id=course.getId();
@@ -282,6 +282,7 @@ public class RelationServiceImpl implements RelationService{
                         if (addTeacher_courseSuccess!=1){
                             throw new RuntimeException("关联教师过程中出现错误");
                         }
+
                     }
                     //如果该老师以前负责过该课程，但现在不负责，重新建立关系
                     else if (isDelete==1){
@@ -293,6 +294,25 @@ public class RelationServiceImpl implements RelationService{
                     //gg情况
                     else if (isDelete==0){
                         throw new RuntimeException("教师课程关系处理时出现未知错误，gg！！！");
+                    }
+
+                    Integer courseGroup_teacherExists;
+                    courseGroup_teacherExists=courseGroup_teacherDao.ifRelationExists(courseGroup_id,teacher_id);
+                    //该教师从未属于过该课程组
+                    if (courseGroup_teacherExists==null){
+                        int addCourseGroup_TeacherSuccess;
+                        addCourseGroup_TeacherSuccess=courseGroup_teacherDao.addCourseGroup_Teacher(courseGroup_id,teacher_id);
+                        if (addCourseGroup_TeacherSuccess!=1){
+                            throw  new RuntimeException("关联教师课程组过程中出现异常");
+                        }
+                    }else if (courseGroup_teacherExists==1){
+                        int recoverCourseGroup_TeacherSuccess;
+                        recoverCourseGroup_TeacherSuccess=courseGroup_teacherDao.recoverRelation(courseGroup_id,teacher_id);
+                        if (recoverCourseGroup_TeacherSuccess!=1){
+                            throw new RuntimeException("恢复课程组教师之间的关系");
+                        }
+                    }else{
+
                     }
 
                 }
@@ -360,6 +380,24 @@ public class RelationServiceImpl implements RelationService{
                             else if (isDelete == 0) {
                                 throw new RuntimeException("教师课程关系处理时出现未知错误，gg！！！");
                             }
+
+                        }
+                        Integer courseGroup_teacherExists;
+                        courseGroup_teacherExists=courseGroup_teacherDao.ifRelationExists(courseGroup_id,teacher_id);
+                        //该教师从未属于过该课程组
+                        if (courseGroup_teacherExists==null){
+                            int addCourseGroup_TeacherSuccess;
+                            addCourseGroup_TeacherSuccess=courseGroup_teacherDao.addCourseGroup_Teacher(courseGroup_id,teacher_id);
+                            if (addCourseGroup_TeacherSuccess!=1){
+                                throw  new RuntimeException("关联教师课程组过程中出现异常");
+                            }
+                        }else if (courseGroup_teacherExists==1){
+                            int recoverCourseGroup_TeacherSuccess;
+                            recoverCourseGroup_TeacherSuccess=courseGroup_teacherDao.recoverRelation(courseGroup_id,teacher_id);
+                            if (recoverCourseGroup_TeacherSuccess!=1){
+                                throw new RuntimeException("恢复课程组教师之间的关系");
+                            }
+                        }else{
 
                         }
                     }

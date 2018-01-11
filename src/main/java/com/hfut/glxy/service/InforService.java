@@ -80,6 +80,17 @@ public interface InforService {
     */
     Map getCourseDetail(String course_id) throws Exception;
 
+    /**
+         *
+         * @Date 2018/1/11 13:58
+         * @author students_ManagementSchool
+         * @param unit_id
+         * @return
+         * @since JDK 1.8
+         * @condition   获取某一教学单元的详细信息
+    */
+    Map getUnitDetail(String unit_id) throws Exception;
+
 
 
 }
