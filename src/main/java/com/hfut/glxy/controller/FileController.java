@@ -1,4 +1,3 @@
-/*
 package com.hfut.glxy.controller;
 
 import com.hfut.glxy.dto.Result;
@@ -12,6 +11,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jodconverter.DocumentConverter;
 import org.jodconverter.document.DefaultDocumentFormatRegistry;
+/*import org.jodconverter.document.DocumentFormatRegistry;
+import org.jodconverter.job.ConversionJobWithOptionalSourceFormatUnspecified;
+import org.jodconverter.job.ConversionJobWithRequiredSourceFormatUnspecified;*/
 import org.jodconverter.office.OfficeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,15 +22,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-*/
+
 /**
  * @author chenliangliang
  * @date: 2017/12/4
- *//*
+ */
 
 @Controller
 @RequestMapping(value = "/file")
@@ -48,19 +52,15 @@ public class FileController {
 
 
     private PictureService pictureService;
-*/
-/*
-    private DocumentConverter converter;*//*
 
+
+    private DocumentConverter converter;
 
     @Autowired
-    protected FileController(PictureService pictureService,*/
-/*, DocumentConverter converter,*//*
-
-                             OfficeService officeService) {
+    protected FileController(PictureService pictureService, DocumentConverter converter, OfficeService officeService) {
         this.pictureService = pictureService;
-       */
-/* this.converter = converter;*//*
+
+        this.converter = converter;
 
         this.officeService = officeService;
     }
@@ -80,18 +80,17 @@ public class FileController {
     @GetMapping("/view/{file}")
     public String view(@PathVariable("file") String file,
                        ModelMap map) {
-        map.addAttribute("url","/pdfjs/web/viewer.html?file=/view/"+file+".pdf");
+        map.addAttribute("url", "/pdfjs/web/viewer.html?file=/view/" + file + ".pdf");
         return "pdf/pdf";
     }
 
 
-    */
-/**
+    /**
      * 上传图片接口
      *
      * @param file
      * @return
-     *//*
+     */
 
     @ResponseBody
     @PostMapping("/pic")
@@ -129,13 +128,12 @@ public class FileController {
     }
 
 
-    */
-/**
+    /**
      * 上传视频接口
      *
      * @param file
      * @return
-     *//*
+     */
 
     @ResponseBody
     @PostMapping(value = "/video")
@@ -173,14 +171,13 @@ public class FileController {
     }
 
 
-    */
-/**
+    /**
      * 上传word文件接口
      *
      * @param file
      * @return
      * @throws IOException
-     *//*
+     */
 
     @ResponseBody
     @PostMapping("/word")
@@ -270,8 +267,8 @@ public class FileController {
             office.setName(originName);
             office.setDescription(desc);
             office.setType(fileType);
-            office.setViewUrl(netPath+outFileName);
-            office.setFileUrl(netPath+inFileName);
+            office.setViewUrl(netPath + outFileName);
+            office.setFileUrl(netPath + inFileName);
 
             if (officeService.insert(office)) {
                 return ResultUtil.OK(office);
@@ -286,4 +283,3 @@ public class FileController {
 
 
 }
-*/

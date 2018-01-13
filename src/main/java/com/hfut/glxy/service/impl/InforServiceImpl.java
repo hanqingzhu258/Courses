@@ -33,6 +33,8 @@ public class InforServiceImpl implements InforService {
     @Resource
     private CourseDao courseDao;
     @Resource
+    private Course_ChapterDao course_chapterDao;
+    @Resource
     private PictureDao pictureDao;
     @Resource
     private CourseGroup_TeacherDao courseGroup_teacherDao;
@@ -66,6 +68,8 @@ public class InforServiceImpl implements InforService {
     private UnitDao unitDao;
     @Resource
     private Unit_OfficeDao unit_officeDao;
+    @Resource
+    private Video_PictureDao video_pictureDao;
     /**
      *
      * @Date 2017/12/6 15:26
@@ -344,7 +348,6 @@ public class InforServiceImpl implements InforService {
 
         map.put("courseinfo",mapTR);
 
-
         return map;
     }
 
@@ -369,21 +372,32 @@ public class InforServiceImpl implements InforService {
         }
         map.put("unit",unit);//存放教学单元基本信息
 
-        List<Video> videos=new ArrayList<>();
+        List<Map> videosMap=new ArrayList<>();
         String [] video_ids;
         video_ids=unit_videoDao.getVideosByUnit(unit_id);
         if (video_ids==null){
 
         }else{
             for (String video_id:video_ids){
+                Map videoMap=new HashMap();
                 Video video=videoDao.queryVideoById(video_id);
                 if (video==null){
                     throw new RuntimeException("视频不存在");
                 }
-                videos.add(video);
+
+                videoMap.put("video",video);
+
+                String picture_id=video_pictureDao.getPictureByVideo(video_id);
+                Picture picture=pictureDao.queryPictureById(picture_id);
+                if (picture==null){
+                    throw new RuntimeException("视频缩略图不存在");
+                }
+
+                videoMap.put("picture",picture);
+                videosMap.add(videoMap);
             }
         }
-        map.put("videos",videos);//存放视频信息
+        map.put("videos",videosMap);//存放视频信息
 
         List<KnowledgePoint> knowledgePoints;
         knowledgePoints=knowledgePointService.getKnowledgePointsByUnit(unit_id);
@@ -414,33 +428,50 @@ public class InforServiceImpl implements InforService {
         }
         map.put("chapter",chapter);
 
+        String course_id=course_chapterDao.getCurrentCourseByChapter(chapter_id);
+        Course course=courseDao.queryCourseById(course_id);
+        map.put("course",course);//存放课程信息
+
         List<Map> videos_chapter=new ArrayList<>();
         String[] unit_ids=chapter_unitDao.getUnitsByChapter(chapter_id);
         for(String unitId:unit_ids){
-            Map mapV=new HashMap();//存放每章的视频信息
+            Map mapV=new HashMap();//存放每教学单元的视频信息
 
             Unit unitV=unitDao.queryUnitById(unitId);
-            mapV.put("unit",unit);//存放某教学单元视频
+            mapV.put("unit",unitV);//存放某教学单元信息
 
 
             String [] videoIds=unit_videoDao.getVideosByUnit(unitId);
             if (videoIds==null){
 
             }else{
-                List<Video> videosV=new ArrayList<>();
+                List<Map> videosVMap=new ArrayList<>();
                 for (String videoId:videoIds){
+                    Map videoMap=new HashMap();
                     Video video=videoDao.queryVideoById(videoId);
                     if (video==null){
                         throw new RuntimeException("视频又不存在");
                     }
-                    videosV.add(video);
+                    videoMap.put("video",video);
+
+                    String picture_id=video_pictureDao.getPictureByVideo(videoId);
+                    Picture picture=pictureDao.queryPictureById(picture_id);
+                    if (picture==null){
+                        throw new RuntimeException("视频缩略图不存在");
+                    }
+
+                    videoMap.put("picture",picture);
+                    videosVMap.add(videoMap);
+
                 }
-                mapV.put("videos",videosV);
+                mapV.put("videos",videosVMap);
             }
 
             videos_chapter.add(mapV);
         }
         map.put("videos_chapter",videos_chapter);
+
+
 
         return map;
     }

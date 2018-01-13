@@ -25,30 +25,29 @@ import java.util.Map;
 @Controller
 public class PageController {
 
-    private static final Logger logger= LoggerFactory.getLogger(ManagerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
 
     @Resource
     private CourseService courseService;
 
     /**
-         *
-         * @Date 2017/11/25 19:03
-         * @author students_ManagementSchool
-         * @return
-         * @since JDK 1.8
-         * @condition 从数据库获取全部课程信息，返回前台登录页面，供用户选择登录
-    */
+     * @return
+     * @Date 2017/11/25 19:03
+     * @author students_ManagementSchool
+     * @condition 从数据库获取全部课程信息，返回前台登录页面，供用户选择登录
+     * @since JDK 1.8
+     */
     @ResponseBody
-    @RequestMapping(value = "/index",method = RequestMethod.GET)
-    public Result<List<Map>> returnCourses(){
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public Result<List<Map>> returnCourses() {
         List<Map> maps;
         try {
             maps = courseService.getAllCourses();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return new Result<>(false,"课程获取失败",null);
+            return new Result<>(false, "课程获取失败", null);
         }
-        return new Result<>(true,"课程获取成功",maps);
+        return new Result<>(true, "课程获取成功", maps);
     }
 
 
@@ -62,11 +61,15 @@ public class PageController {
         return "/superadmin/courseGroupList";
     }
 
-    @RequestMapping(value="/addCourse",method = RequestMethod.GET)
-    public String addCourse(){return "/superadmin/addCourse";}
+    @RequestMapping(value = "/addCourse", method = RequestMethod.GET)
+    public String addCourse() {
+        return "/superadmin/addCourse";
+    }
 
-    @RequestMapping(value="/courseList",method = RequestMethod.GET)
-    public String courseList(){return "/superadmin/courseList";}
+    @RequestMapping(value = "/courseList", method = RequestMethod.GET)
+    public String courseList() {
+        return "/superadmin/courseList";
+    }
 
     /*@RequestMapping(value = "/addChapter", method = RequestMethod.GET)
     public String addchapter() {
@@ -84,15 +87,45 @@ public class PageController {
         return "/superadmin/teacherManage";
     }
 
-    @RequestMapping(value = "/teacherList",method = RequestMethod.GET)
-    public String teacherList(){return "/superadmin/teacherList";}
+    @RequestMapping(value = "/teacherList", method = RequestMethod.GET)
+    public String teacherList() {
+        return "/superadmin/teacherList";
+    }
 
     @RequestMapping(value = "/adminManage", method = RequestMethod.GET)
     public String adminManage() {
         return "/superadmin/adminManage";
     }
 
-    @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public String login(){return "/superadmin/login";}
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "/superadmin/login";
+    }
+
+    /**
+     * @Author: yanni
+     * @Description: 普通管理员
+     * @Date: 14:33 2018/1/11
+     * @Modified By:
+     * @Params: * @param null
+     */
+    @RequestMapping(value = "/adminindex", method = RequestMethod.GET)
+    public String adminIndex() {
+        return "/admin/index";
+    }
+
+    @RequestMapping(value = "/sidebar", method = RequestMethod.GET)
+    public String sidebar() {
+        return "/admin/sidebar";
+    }
+
+
+
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    public String welcome() {
+        return "/admin/welcome";
+    }
+
 
 }
+
