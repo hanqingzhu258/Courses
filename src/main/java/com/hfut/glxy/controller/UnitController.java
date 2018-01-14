@@ -42,7 +42,7 @@ public class UnitController {
     */
     @ResponseBody
     @RequestMapping(value = "/addUnit",method = RequestMethod.POST)
-    public Result<String> addUnit(@RequestBody @Valid Unit unit, BindingResult result){
+    public Result<Unit> addUnit(@RequestBody @Valid Unit unit, BindingResult result){
 
         if (result.hasErrors()){
             String message=result.getFieldError().getDefaultMessage();
@@ -65,7 +65,7 @@ public class UnitController {
             return new Result<>(false,"未知错误",null);
         }
 
-        return new Result<>(true,"添加成功",null);
+        return new Result<>(true,"添加成功",unit);
     }
 
     /**

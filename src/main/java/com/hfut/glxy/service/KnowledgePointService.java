@@ -4,6 +4,7 @@ import com.hfut.glxy.entity.KnowledgePoint;
 import com.hfut.glxy.entity.Unit;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ProjectName: Courses <br/>
@@ -113,7 +114,7 @@ public interface KnowledgePointService {
          * @since JDK 1.8
          * @condition  获取与某一知识点相关的所有教学单元
     */
-    List<Unit> getUnitsByKnowledgePoint(String knowledgePoint_id) throws Exception;
+    List<Map> getUnitsByKnowledgePoint(String knowledgePoint_id) throws Exception;
 
 
 

@@ -1,5 +1,7 @@
 package com.hfut.glxy.service.impl;
 
+import com.hfut.glxy.entity.Chapter;
+import com.hfut.glxy.entity.Course;
 import com.hfut.glxy.entity.KnowledgePoint;
 import com.hfut.glxy.entity.Unit;
 import com.hfut.glxy.mapper.*;
@@ -10,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ProjectName: Courses <br/>
@@ -36,6 +40,12 @@ public class KnowledgePointServiceImpl implements KnowledgePointService {
 
     @Resource
     private UnitDao unitDao;
+
+    @Resource
+    private ChapterDao chapterDao;
+
+    @Resource
+    private CourseDao courseDao;
 
     @Resource
     private Course_ChapterDao course_chapterDao;
@@ -329,7 +339,7 @@ public class KnowledgePointServiceImpl implements KnowledgePointService {
          * @condition  获取与某一知识点相关的所有教学单元(模糊查询)
     */
     @Override
-    public List<Unit> getUnitsByKnowledgePoint(String knowledgePoint_id) throws Exception{
+    public List<Map> getUnitsByKnowledgePoint(String knowledgePoint_id) throws Exception{
 
         //获取该知识点的内容
         KnowledgePoint knowledgePoint=knowledgePointDao.queryKnowledgePointById(knowledgePoint_id);
@@ -440,7 +450,30 @@ public class KnowledgePointServiceImpl implements KnowledgePointService {
             
         }
 
-        return units;
+        List<Map> maps=new ArrayList<>();
+        for (Unit unitI:units){
+
+            String chapter_id=chapter_unitDao.getChapterByUnit(unitI.getId());
+            Chapter chapter=chapterDao.queryChapterById(chapter_id);
+            if (chapter==null){
+                throw new RuntimeException("章不存在");
+            }
+
+            String course_id=course_chapterDao.getCurrentCourseByChapter(chapter_id);
+            Course course=courseDao.queryCourseById(course_id);
+            if (course==null){
+                throw new RuntimeException("课程不存在");
+            }
+
+            Map map=new HashMap();
+            map.put("course",course);
+            map.put("chapter",chapter);
+            map.put("unit",unitI);
+
+            maps.add(map);
+        }
+
+        return maps;
     }
 
     @Override

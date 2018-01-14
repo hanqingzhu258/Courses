@@ -2,6 +2,7 @@ package com.hfut.glxy.service.impl;
 
 import com.hfut.glxy.entity.Course;
 import com.hfut.glxy.entity.CourseGroup;
+import com.hfut.glxy.entity.Office;
 import com.hfut.glxy.entity.Teacher;
 import com.hfut.glxy.mapper.*;
 import com.hfut.glxy.service.RelationService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +38,10 @@ public class RelationServiceImpl implements RelationService{
     private CourseGroup_CourseDao courseGroup_courseDao;
     @Resource
     private Teacher_CourseDao teacher_courseDao;
+    @Resource
+    private OfficeDao officeDao;
+    @Resource
+    private Unit_OfficeDao unit_officeDao;
 
     /**
          *
@@ -456,5 +462,41 @@ public class RelationServiceImpl implements RelationService{
     }
 
 
+    /**
+         *
+         * @Date 2018/1/13 20:45
+         * @author students_ManagementSchool
+         * @param unit_id
+         * @param office_ids
+         * @return
+         * @since JDK 1.8
+         * @condition 绑定教学资料和教学单元
+    */
+    @Override
+    @Transactional
+    public List<Office> bindUnit_offices(String unit_id,List<String> office_ids) throws Exception{
+
+        List<Office> offices=new ArrayList<>();
+
+        for (String office_id:office_ids){
+
+            Office office=officeDao.queryOfficeById(office_id);
+            if (office==null){
+                throw new RuntimeException("教学资料不存在");
+            }
+
+
+            int addUnit_OfficeSuccess;
+            addUnit_OfficeSuccess=unit_officeDao.addRelation(unit_id,office_id);
+            if (addUnit_OfficeSuccess!=1){
+                throw new RuntimeException("添加教学单元教学资料关联失败");
+            }
+
+            offices.add(office);
+        }
+
+        return offices;
+
+    }
 
 }

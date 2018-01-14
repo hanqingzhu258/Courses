@@ -11,9 +11,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jodconverter.DocumentConverter;
 import org.jodconverter.document.DefaultDocumentFormatRegistry;
-/*import org.jodconverter.document.DocumentFormatRegistry;
+import org.jodconverter.document.DocumentFormatRegistry;
 import org.jodconverter.job.ConversionJobWithOptionalSourceFormatUnspecified;
-import org.jodconverter.job.ConversionJobWithRequiredSourceFormatUnspecified;*/
+import org.jodconverter.job.ConversionJobWithRequiredSourceFormatUnspecified;
+
 import org.jodconverter.office.OfficeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +30,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-/**
+/*
+*
  * @author chenliangliang
  * @date: 2017/12/4
- */
+*/
+
+
 
 @Controller
 @RequestMapping(value = "/file")
@@ -85,12 +89,15 @@ public class FileController {
     }
 
 
-    /**
+/*
+*
      * 上传图片接口
      *
      * @param file
      * @return
-     */
+*/
+
+
 
     @ResponseBody
     @PostMapping("/pic")
@@ -128,12 +135,15 @@ public class FileController {
     }
 
 
-    /**
+/*
+*
      * 上传视频接口
      *
      * @param file
      * @return
-     */
+*/
+
+
 
     @ResponseBody
     @PostMapping(value = "/video")
@@ -171,13 +181,14 @@ public class FileController {
     }
 
 
-    /**
+/**
      * 上传word文件接口
      *
      * @param file
      * @return
-     * @throws IOException
-     */
+     * @throws IOException*/
+
+
 
     @ResponseBody
     @PostMapping("/word")

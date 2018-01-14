@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -272,22 +273,22 @@ public class KnowledgePointController {
     */
     @ResponseBody
     @RequestMapping(value = "/getUnitsByKnowledgePoint",method = RequestMethod.POST)
-    public Result<List<Unit>> getUnitsByKnowledgePoint(@RequestBody KnowledgePoint knowledgePoint){
+    public Result<List<Map>> getUnitsByKnowledgePoint(@RequestBody KnowledgePoint knowledgePoint){
 
         if (knowledgePoint.getId()==null||knowledgePoint.getId().trim().isEmpty()){
             return new Result<>(false,"id未选择",null);
         }
 
-        List<Unit> units;
+        List<Map> maps;
 
         try{
-            units=knowledgePointService.getUnitsByKnowledgePoint(knowledgePoint.getId());
+            maps=knowledgePointService.getUnitsByKnowledgePoint(knowledgePoint.getId());
         }catch(Exception e){
             e.printStackTrace();
             return new Result<>(false,"数据获取异常",null);
         }
 
-        return new Result<>(true,"获取成功",units);
+        return new Result<>(true,"获取成功",maps);
     }
 
     /**

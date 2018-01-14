@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author chenliangliang
  * @date: 2017/11/29
  */
-@WebFilter(urlPatterns = {/*"/homework","/homework/*",*/"/notice","/notice/*"})
+//@WebFilter(urlPatterns = {/*"/homework","/homework/*",*/"/notice","/notice/*"})
 public class TeacherFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
