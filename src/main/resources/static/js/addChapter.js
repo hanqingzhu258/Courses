@@ -2,6 +2,11 @@ $(document).ready(function () {
     'use strict';
     $('[data-toggle="popover"]').popover()
 
+
+    var E = window.wangEditor;
+    var editor = new E('#mywangeditor');
+    // 或者 var editor = new E( document.getElementById('editor') )
+    editor.create()
 });
 
 /**
@@ -93,6 +98,36 @@ function updateShownChapter() {
 
 }
 
+function addzhishidianSelect() {
+    $.ajax({
+        url: 'http://localhost:8080/addUnit_knowledgePointRelation',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({
+            id: $("#zhishidinaSelect").val(),
+            unit_id: $("#uniteIdInput").val()
+
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+
+            $("#updatezhishidianList").append('<a href="#" class="btn btn-primary">' + data.data.content + '</a><a href="#" class="btn btn-link" onclick="">删除</a>');
+
+
+            console.log(data.data.content);
+            console.log("success");
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+}
+
 function addZhishidian() {
     $.ajax({
         url: 'http://localhost:8080/addKnowledgePoint',
@@ -107,12 +142,174 @@ function addZhishidian() {
         cache: false
     })
         .done(function (data) {
+
+            console.log(data.data.id)
+
             $("#addZhishidianInput").val("");
-            $("#zhishidianList").append('<a href="#" class="btn btn-primary">' + data.data.content + '</a><a href="#" class="btn btn-link" onclick="">删除</a>');
+            $("#zhishidianList").append('<span href="#" id="' + data.data.id + '" class="btn btn-primary">' + data.data.content + '<a href="#" class="btn btn-link" onclick=deleteKnowledgePoint("' + data.data.id + '")>删除</a></span>');
             $("#zhishidinaSelect").append('<option value="' + data.data.id + '">' + data.data.content + '</option>');
-            //todo 添加到
-            //todo 把添加的知识点加到下拉框里
+
             console.log(data.data.content);
+            console.log("success");
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
+
+//todo 添加课时
+function addSerialNumber() {
+    $("#hidecourses").show('slow', function () {
+    });
+    $.ajax({
+        url: 'http://localhost:8080/addUnit',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({
+            "number": $("#selectChapterSerialNumber").val(),
+            "name": $("#inputChapterName").val(),
+            "chapter_id": $("#totalId").val()
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+            $("#selectupdateSerial").val(data.data.number);
+$("#inputUpdateSerial").val(data.data.name)
+            console.log("success");
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
+
+//更新章节
+function updateSerialNumber() {
+    $.ajax({
+        url: 'http://localhost:8080/',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({
+            "courseserialnumber": $("#selectChapterSerialNumber").val(),
+            "courseSerialName": $("#inputChapterName").val(),
+            "id": $("#selectSerialId").val()
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function () {
+            console.log("success");
+        })
+        .fail(function () {
+
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
+
+function showFileName() {
+    var inputname = $("#filepreview").val();
+    $("#textName").val(inputname);
+}
+
+function uploadFile() {
+    var name = $("#filepreview").val();
+    $.ajax({
+        url: 'http://localhost:8080/office',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({
+            "courseserialnumber": $("#selectChapterSerialNumber").val(),
+            "courseSerialName": $("#inputChapterName").val(),
+            "id": $("#selectSerialId").val()
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function () {
+            console.log("success");
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+    // $("#uploadFiles").append('<a href="#" class="btn btn-link" >' + name + '</a><a class="badge">&nbsp;&nbsp;&nbsp;&nbsp;×</a>');
+
+    // $("#uploadFiles").append('')
+
+    // $("#uploadFiles").append('<a href="#" >Inbox <span class="badge">42</span></a>\n' +
+    //     '                <button class="btn btn-primary" type="button">\n' +
+    //     '                    Messages <span class="badge">4</span>\n' +
+    //     '                </button>\n' +
+    //     '                <a href="#">Inbox <span class="badge">42</span></a>\n' +
+    //     '                <button class="btn btn-primary" type="button">\n' +
+    //     '                    Messages <span class="badge">4</span>\n' +
+    //     '                </button>\n' +
+    //     '                <button type="button" class="btn btn-primary">添加到本课</button>')
+}
+
+function addFilesToCourse() {
+    $.ajax({
+        url: 'http://localhost:8080/bindUnit_offices',
+        type: "post",
+        dataType: 'json',
+        data: JSON.stringify({
+            "unit_id": $("#uniteIdInput").val(),
+            "office_ids": [
+                "7", "8"
+            ]
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function () {
+            console.log("success");
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
+
+function deleteKnowledgePoint(data) {
+
+    console.log("dsdfsfsdfsfs");
+    console.log(data);
+    $.ajax({
+        url: 'http://localhost:8080/deleteKnowledgePoint',
+        type: "post",
+        dataType: 'json',
+        data: JSON.stringify({
+
+            "id": data
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function () {
+$("#"+data+"").remove();
             console.log("success");
         })
         .fail(function () {

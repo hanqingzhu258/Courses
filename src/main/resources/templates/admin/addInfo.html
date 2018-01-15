@@ -12,16 +12,14 @@
     <link rel="stylesheet" href="lib/global.css">
     <link rel="stylesheet" type="text/css" href="lib/sidebar.css">
     <link rel="stylesheet" href="lib/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="lib/datatable/css/dataTables.bootstrap.css">
     <link rel="stylesheet" type="text/css" href="font/iconfont.css">
-
 </head>
 
 <body>
 <header class="header">
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-right ">
-            <ul class="nav navbar-nav" style="margin: 0">
+            <ul class="nav navbar-nav">
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-user"></i>
@@ -52,26 +50,27 @@
     <div class="bg-gray">
         <div class="container">
             <div class="row">
-
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <p class="panel-title">作业列表</p>
+                        <p class="panel-title">添加通知</p>
                     </div>
                     <div class="panel-body">
-                        <table id="homeworkListDetails" class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <td>序号</td>
-                                <td>名称</td>
-                                <td>详情</td>
-                                <td>删除</td>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="homeworkTitle">请输入通知标题:</label>
+                                    <input type="text"  placeholder="这里是通知标题" name="homeworkTitle" class="form-control" id="homeworkTitle">
+                                </div>
+                            </div>
+                            <div class="col-md-12 ">
+                                <!--这里是富文本编辑器-->
+                                <div class="form-group">
+                                    <div id="homeworkContent" class="z-index-bottom"></div>
+                                    <p></p>
+                                    <button class="btn btn-primary btn-block" onclick="addHomework()">添加</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -80,11 +79,15 @@
 </section>
 <script type="text/javascript" src="lib/jquery-3.2.1.js"></script>
 <script type="text/javascript" src="lib/bootstrap/bootstrap.js"></script>
-<script type="text/javascript" src="js/homeworkList.js"></script>
-<script type="text/javascript" src="lib/datatable/js/jquery.dataTables.js"></script>
-<script type="text/javascript" src="lib/datatable/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="lib/wangEditor.min.js"></script>
+<script type="text/javascript" src="js/addHomework.js"></script>
+<script type="text/javascript">
+    var E = window.wangEditor;
+    var editor = new E('#homeworkContent');
+    // 或者 var editor = new E( document.getElementById('editor') )
+    editor.create()
+</script>
 <!-- <script src="js/jquery.min.js"></script> -->
-
 </body>
 
 </html>

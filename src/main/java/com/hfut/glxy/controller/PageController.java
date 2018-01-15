@@ -26,10 +26,8 @@ import java.util.Map;
 public class PageController {
 
     private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
-
     @Resource
     private CourseService courseService;
-
     /**
      * @return
      * @Date 2017/11/25 19:03
@@ -49,59 +47,60 @@ public class PageController {
         }
         return new Result<>(true, "课程获取成功", maps);
     }
-
-
+    /**
+     * @Author: yanni
+     * @Description:超级管理员
+     * @Date: 13:10 2018/1/14
+     * @Modified By:
+     * @Params: * @param null
+     */
+    @RequestMapping(value = "/superadmin", method = RequestMethod.GET)
+    public String superadmin() {
+        return "/superadmin/index";
+    }
     @RequestMapping(value = "/addCourseGroup", method = RequestMethod.GET)
     public String addCourseGroup() {
         return "/superadmin/addCourseGroup";
     }
-
     @RequestMapping(value = "/courseGroupList", method = RequestMethod.GET)
     public String courseGrouplist() {
         return "/superadmin/courseGroupList";
     }
-
     @RequestMapping(value = "/addCourse", method = RequestMethod.GET)
     public String addCourse() {
         return "/superadmin/addCourse";
     }
-
     @RequestMapping(value = "/courseList", method = RequestMethod.GET)
     public String courseList() {
         return "/superadmin/courseList";
+    } @RequestMapping(value = "/superadminsidebar", method = RequestMethod.GET)
+    public String superadminsidebar() {
+        return "/superadmin/sidebar";
     }
-
     /*@RequestMapping(value = "/addChapter", method = RequestMethod.GET)
     public String addchapter() {
         return "/superadmin/addChapter";
     }
-
     @RequestMapping(value = "apterList", method = RequestMethod.GET)
     public String chapterlist() {
         return "/superadminapterList";
     }*/
-
-
-    @RequestMapping(value = "/teacherManage", method = RequestMethod.GET)
-    public String teacherManage() {
-        return "/superadmin/teacherManage";
+    @RequestMapping(value = "/addTeacher", method = RequestMethod.GET)
+    public String addTeacher() {
+        return "/superadmin/addTeacher";
     }
-
     @RequestMapping(value = "/teacherList", method = RequestMethod.GET)
     public String teacherList() {
         return "/superadmin/teacherList";
     }
-
-    @RequestMapping(value = "/adminManage", method = RequestMethod.GET)
-    public String adminManage() {
-        return "/superadmin/adminManage";
+    @RequestMapping(value = "/superadminWelcome", method = RequestMethod.GET)
+    public String superadminWelcome() {
+        return "/superadmin/welcome";
     }
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "/superadmin/login";
     }
-
     /**
      * @Author: yanni
      * @Description: 普通管理员
@@ -109,18 +108,50 @@ public class PageController {
      * @Modified By:
      * @Params: * @param null
      */
-    @RequestMapping(value = "/adminindex", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminIndex() {
         return "/admin/index";
     }
-
     @RequestMapping(value = "/sidebar", method = RequestMethod.GET)
     public String sidebar() {
         return "/admin/sidebar";
     }
-
-
-
+    @RequestMapping(value = "/addChapter", method = RequestMethod.GET)
+    public String addChapter() {
+        return "/admin/addChapter";
+    }
+    @RequestMapping(value = "/addData", method = RequestMethod.GET)
+    public String addData() {
+        return "/admin/addData";
+    }
+    @RequestMapping(value = "/addExercise", method = RequestMethod.GET)
+    public String addExercise() {
+        return "/admin/addExercise";
+    }
+    @RequestMapping(value = "/addHomework", method = RequestMethod.GET)
+    public String addHomework() {
+        return "/admin/addHomework";
+    }
+    @RequestMapping(value = "/chapterDetail", method = RequestMethod.GET)
+    public String chapterDetail() {
+        return "/admin/chapterDetail";
+    }
+    @RequestMapping(value = "/chapterList", method = RequestMethod.GET)
+    public String chapterList() {
+        return "/admin/chapterList";
+    }
+    @RequestMapping(value = "/dataList", method = RequestMethod.GET)
+    public String dataList() {
+        return "/admin/dataList";
+    }
+    @RequestMapping(value = "/exerciseList", method = RequestMethod.GET)
+    public String exerciseList() {
+        return "/admin/exerciseList";
+    }
+    @RequestMapping(value = "/homeworkList", method = RequestMethod.GET)
+    public String homeworkList() {
+        return "/admin/homeworkList";
+    }
     @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public String welcome() {
         return "/admin/welcome";
