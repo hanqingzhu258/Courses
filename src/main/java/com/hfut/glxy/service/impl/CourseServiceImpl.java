@@ -1,5 +1,6 @@
 package com.hfut.glxy.service.impl;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.entity.*;
 import com.hfut.glxy.mapper.*;
 import com.hfut.glxy.service.CourseService;
@@ -326,6 +327,71 @@ public class CourseServiceImpl implements CourseService {
             return null;
         }
 
+        /*for (Course course:courses){
+
+            Map map=new HashMap();
+            List<Teacher> teachers=new ArrayList<>();
+
+            String course_id=course.getId();
+            //查图片
+            String picture_id=course_pictureDao.getCurrentPictureIdByCourse(course_id);
+            Picture picture=pictureDao.queryPictureById(picture_id);
+            //查课程组
+            String courseGroup_id=courseGroup_courseDao.queryCourseGroupByCourse(course_id);
+            CourseGroup courseGroup=courseGroupDao.queryCourseGroupById(courseGroup_id);
+            //查教师
+            *//*String teacher_id=teacher_courseDao.getCurrentTeacherIdByCourse(course_id);*//*
+            String[] teacher_ids=teacher_courseDao.getCurrentTeacherIdByCourse(course_id);
+            for (String teacher_id:teacher_ids){
+                Teacher teacher=teacherDao.queryTeacherById(teacher_id);
+                teachers.add(teacher);
+            }
+            *//*Teacher teacher=teacherDao.queryTeacherById(teacher_id);*//*
+            //查管理员
+            String manager_id=manager_courseDao.queryManager(course_id);
+            Manager manager=managerDao.queryManagerById(manager_id);
+
+            map.put("course",course);
+            map.put("manager",manager);
+            map.put("picture",picture);
+            map.put("courseGroup",courseGroup);
+            map.put("teachers",teachers);
+
+            maps.add(map);
+        }*/
+
+        return maps;
+    }
+
+
+    /**
+         *
+         * @Date 2018/1/15 22:34
+         * @author students_ManagementSchool
+         * @param startPage
+         * @param pageSize
+         * @return
+         * @since JDK 1.8
+         * @condition  分页查询课程
+    */
+    @Override
+    public PageResult<Map> getCoursesByPage(int startPage, int pageSize) throws Exception{
+
+        PageResult<Map> coursePageResult=new PageResult<>();
+
+        int totalCount=courseDao.getCourseTotalCount();
+        coursePageResult.setiTotalDisplayRecords(totalCount);
+        coursePageResult.setiTotalRecords(totalCount);
+
+        List<Map> maps=new ArrayList<>();
+        /*List<Course> courses= courseDao.getAllCourses();*/
+
+        List<Course> courses= courseDao.queryCourseByPage(startPage,pageSize);
+
+        if (courses.isEmpty()){
+            return null;
+        }
+
         for (Course course:courses){
 
             Map map=new HashMap();
@@ -359,7 +425,10 @@ public class CourseServiceImpl implements CourseService {
             maps.add(map);
         }
 
-        return maps;
+        coursePageResult.setData(maps);
+
+
+        return coursePageResult;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.hfut.glxy.service;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.entity.Course;
 import com.hfut.glxy.entity.Manager;
 
@@ -74,5 +75,17 @@ public interface CourseService {
          * @condition 获取全部课程
     */
     List<Map> getAllCourses() throws Exception;
+
+    /**
+         *
+         * @Date 2018/1/15 22:07
+         * @author students_ManagementSchool
+         * @param startPage
+         * @param pageSize
+         * @return
+         * @since JDK 1.8
+         * @condition   分页查询课程
+    */
+    PageResult<Map> getCoursesByPage(int startPage, int pageSize) throws Exception;
 
 }

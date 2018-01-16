@@ -1,3 +1,4 @@
+/*
 package com.hfut.glxy.controller;
 
 import com.hfut.glxy.dto.Result;
@@ -30,11 +31,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+*/
 /*
 *
  * @author chenliangliang
  * @date: 2017/12/4
-*/
+*//*
+
 
 
 
@@ -89,13 +92,15 @@ public class FileController {
     }
 
 
+*/
 /*
 *
      * 上传图片接口
      *
      * @param file
      * @return
-*/
+*//*
+
 
 
 
@@ -135,13 +140,15 @@ public class FileController {
     }
 
 
+*/
 /*
 *
      * 上传视频接口
      *
      * @param file
      * @return
-*/
+*//*
+
 
 
 
@@ -181,12 +188,14 @@ public class FileController {
     }
 
 
+*/
 /**
      * 上传word文件接口
      *
      * @param file
      * @return
-     * @throws IOException*/
+     * @throws IOException*//*
+
 
 
 
@@ -294,3 +303,4 @@ public class FileController {
 
 
 }
+*/

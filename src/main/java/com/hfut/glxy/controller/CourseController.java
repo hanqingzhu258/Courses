@@ -1,5 +1,7 @@
 package com.hfut.glxy.controller;
 
+import com.hfut.glxy.dto.Page;
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.dto.Result;
 import com.hfut.glxy.entity.*;
 import com.hfut.glxy.service.CourseService;
@@ -186,7 +188,7 @@ public class CourseController {
     public Result<String> deleteCourseById(@RequestBody Course course){
 
         String course_id=course.getId();
-        if (course_id==null){
+        if (course_id==null||course_id.trim().isEmpty()){
             return new Result<>(false,"参数不能为空",null);
         }
 
@@ -254,4 +256,37 @@ public class CourseController {
         return new Result<>(true,"查询成功",maps);
     }
 
+    /**
+         *
+         * @Date 2018/1/15 22:34
+         * @author students_ManagementSchool
+         * @param map
+         * @return
+         * @since JDK 1.8
+         * @condition  分页查询课程
+    */
+    @ResponseBody
+    @RequestMapping(value = "/getCoursesByPage",method = RequestMethod.POST)
+    public Result<PageResult<Map>> getCoursesByPage(@RequestBody Map map){
+
+        /*System.out.println(map.toString());
+        System.out.println(map.get("aoData"));
+        System.out.println(map.get("iDisplayLength"));
+        System.out.println((int)map.get("iDisplayStart"));*/
+
+        int startPage=(int)map.get("iDisplayStart");
+        int pageSize=(int)map.get("iDisplayLength");
+
+        PageResult<Map> courses;
+
+        try{
+            courses=courseService.getCoursesByPage(startPage,pageSize);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result<>(false,"查询失败",null);
+        }
+
+        return new Result<>(true,"查询成功",courses);
+
+    }
 }

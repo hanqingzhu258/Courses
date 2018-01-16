@@ -85,7 +85,7 @@ public interface CourseDao {
          * @since JDK 1.8
          * @condition 分页查询课程
     */
-    @Select("select * from course order by number desc limit #{startPage},#{pageSize}")
+    @Select("select * from ( select * from course where isDelete=0 ) as test limit #{startPage},#{pageSize}")
     List<Course> queryCourseByPage(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
 
 
@@ -97,7 +97,7 @@ public interface CourseDao {
          * @since JDK 1.8
          * @condition  查询课程总数
     */
-    @Select("select count(*) from course")
+    @Select("select count(*) from course where isDelete=0")
     Integer getCourseTotalCount();
 
     /**   
