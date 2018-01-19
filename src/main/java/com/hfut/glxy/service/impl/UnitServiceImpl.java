@@ -1,5 +1,6 @@
 package com.hfut.glxy.service.impl;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.entity.*;
 import com.hfut.glxy.mapper.*;
 import com.hfut.glxy.service.KnowledgePointService;
@@ -166,6 +167,15 @@ public class UnitServiceImpl implements UnitService {
         return units;
     }
 
+    /**
+         *
+         * @Date 2018/1/19 0:23
+         * @author students_ManagementSchool
+         * @param unit
+         * @return
+         * @since JDK 1.8
+         * @condition 获取某教学单元的全部信息
+    */
     @Override
     public Map queryUnitById(Unit unit) throws Exception{
 
@@ -212,6 +222,51 @@ public class UnitServiceImpl implements UnitService {
         map.put("videos",video_ids);
 
         return map;
+    }
+
+
+    /**   
+         * 
+         * @Date 2018/1/19 0:51
+         * @author students_ManagementSchool
+         * @param map
+         * @return
+         * @since JDK 1.8
+         * @condition  分页查询某页的教学单元
+    */
+    @Override
+    public PageResult<Unit> getUnitsByPage_chapter(Map map) throws Exception{
+
+        int startPage=(int)map.get("iDisplayStart");
+        int pageSize=(int)map.get("iDisplayLength");
+        String chapter_id=(String)map.get("chapter_id");
+
+        PageResult<Unit> unitPageResult=new PageResult<>();
+
+        //获取总数
+        int totalCount=chapter_unitDao.getUnitCountByChapter(chapter_id);
+        if (totalCount==0){
+            return null;
+        }
+
+        unitPageResult.setiTotalRecords(totalCount);
+        unitPageResult.setiTotalDisplayRecords(totalCount);
+
+        //获取教学单元
+        List<Unit> units=new ArrayList<>();
+        String [] unit_ids;
+        unit_ids=chapter_unitDao.getUnitsByPage_chapter(chapter_id,startPage,pageSize);
+        for (String unit_id:unit_ids){
+            Unit unit=unitDao.queryUnitById(unit_id);
+            if (unit==null){
+                throw new RuntimeException("gg gg gg gg");
+            }
+            units.add(unit);
+        }
+
+        unitPageResult.setData(units);
+
+        return unitPageResult;
     }
 
 }

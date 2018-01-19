@@ -68,4 +68,33 @@ public interface Chapter_UnitDao {
     */
     @Select("select chapter_id from chapter_unit where unit_id=#{unit_id} and isDelete=0")
     String getChapterByUnit(@Param("unit_id") String unit_id);
+
+
+    /**
+         *
+         * @Date 2018/1/19 0:34
+         * @author students_ManagementSchool
+         * @param chapter_id
+         * @return
+         * @since JDK 1.8
+         * @condition  获取某一章教学单元的数量
+    */
+    @Select("select count(*) from chapter_unit where chapter_id=#{chapter_id} and isDelete=0")
+    Integer getUnitCountByChapter(@Param("chapter_id") String chapter_id);
+
+    /**   
+         * 
+         * @Date 2018/1/19 0:41
+         * @author students_ManagementSchool
+         * @param chapter_id
+         * @param pageSize
+         * @param startPage
+         * @return
+         * @since JDK 1.8
+         * @condition  分页查询某章的教学单元
+    */
+    @Select("select unit_id from (select * from chapter_unit where chapter_id=#{chapter_id} and isDelete=0) " +
+            "as test limit #{startPage},#{pageSize}")
+    String [] getUnitsByPage_chapter(@Param("chapter_id") String chapter_id,
+                                     @Param("startPage") int startPage,@Param("pageSize") int pageSize);
 }

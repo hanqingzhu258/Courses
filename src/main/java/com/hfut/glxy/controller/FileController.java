@@ -1,9 +1,10 @@
-/*
+
 package com.hfut.glxy.controller;
 
 import com.hfut.glxy.dto.Result;
 import com.hfut.glxy.entity.Office;
 import com.hfut.glxy.entity.Picture;
+import com.hfut.glxy.mapper.OfficeDao;
 import com.hfut.glxy.service.OfficeService;
 import com.hfut.glxy.service.PictureService;
 import com.hfut.glxy.utils.*;
@@ -24,6 +25,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,12 +33,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-*/
+
 /*
 *
  * @author chenliangliang
  * @date: 2017/12/4
-*//*
+*/
 
 
 
@@ -72,6 +74,10 @@ public class FileController {
         this.officeService = officeService;
     }
 
+    @Resource
+    private OfficeDao officeDao;
+
+
 
     @GetMapping
     public String upload() {
@@ -92,14 +98,14 @@ public class FileController {
     }
 
 
-*/
+
 /*
 *
      * 上传图片接口
      *
      * @param file
      * @return
-*//*
+*/
 
 
 
@@ -140,15 +146,14 @@ public class FileController {
     }
 
 
-*/
+
 /*
 *
      * 上传视频接口
      *
      * @param file
      * @return
-*//*
-
+*/
 
 
 
@@ -188,13 +193,13 @@ public class FileController {
     }
 
 
-*/
+
 /**
      * 上传word文件接口
      *
      * @param file
      * @return
-     * @throws IOException*//*
+     * @throws IOException*/
 
 
 
@@ -241,6 +246,9 @@ public class FileController {
     @ResponseBody
     public Result saveOffice(@RequestParam("file") MultipartFile file,
                              @RequestParam(value = "desc", required = false) String desc) {
+
+        System.out.println("正在处理文件上传");
+        System.out.println(file.getOriginalFilename());
 
         if (file.isEmpty()) {
             return ResultUtil.fail("上传的office文件不能为空");
@@ -290,7 +298,15 @@ public class FileController {
             office.setViewUrl(netPath + outFileName);
             office.setFileUrl(netPath + inFileName);
 
+            /*officeDao.addOffice(office);*/
+            /*System.out.println("id: "+office.getId());*/
+            /*return ResultUtil.OK(office);*/
             if (officeService.insert(office)) {
+
+                System.out.println(office.getId());
+                /*System.out.println("latestId: "+officeDao.getLatestId());*/
+                /*office.setId(officeDao.getLatestId());*/
+
                 return ResultUtil.OK(office);
             }
 
@@ -301,6 +317,5 @@ public class FileController {
         return ResultUtil.fail("fail");
     }
 
-
 }
-*/
+

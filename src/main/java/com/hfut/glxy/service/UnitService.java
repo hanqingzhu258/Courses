@@ -1,5 +1,6 @@
 package com.hfut.glxy.service;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.entity.Chapter;
 import com.hfut.glxy.entity.Unit;
 
@@ -71,5 +72,16 @@ public interface UnitService {
          * @condition 获取某一教学单元的所有信息
     */
     Map queryUnitById(Unit unit) throws Exception;
+
+    /**
+         *
+         * @Date 2018/1/19 0:29
+         * @author students_ManagementSchool
+         * @param map
+         * @return
+         * @since JDK 1.8
+         * @condition 分页查询某页的教学单元
+    */
+    PageResult<Unit> getUnitsByPage_chapter(Map map) throws Exception;
 
 }

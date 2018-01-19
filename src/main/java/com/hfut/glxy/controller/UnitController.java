@@ -1,5 +1,6 @@
 package com.hfut.glxy.controller;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.dto.Result;
 import com.hfut.glxy.entity.Unit;
 import com.hfut.glxy.service.UnitService;
@@ -29,6 +30,7 @@ public class UnitController {
 
     @Resource
     private UnitService unitService;
+
 
     /**
          *
@@ -73,19 +75,28 @@ public class UnitController {
          * @Date 2017/12/17 18:37
          * @author students_ManagementSchool
          * @param unit
-         * @param result
          * @return
          * @since JDK 1.8
          * @condition
     */
     @ResponseBody
     @RequestMapping(value = "/updateUnit",method = RequestMethod.POST)
-    public Result<String> updateUnit(@RequestBody @Valid Unit unit,BindingResult result){
+    public Result<String> updateUnit(@RequestBody Unit unit){
 
-        if (result.hasErrors()){
+        /*if (result.hasErrors()){
             String message=result.getFieldError().getDefaultMessage();
             return new Result<>(false,""+message,null);
+        }*/
+
+        if (unit.getId()==null||unit.getId().trim().isEmpty()){
+            return new Result<>(false,"教学单元id不能为空",null);
         }
+        /*if (unit.getNumber()==null||unit.getNumber().trim().isEmpty()){
+            return new Result<>(false,"教学单元编号不能为空",null);
+        }
+        if (unit.getName()==null||unit.getName().trim().isEmpty()){
+            return new Result<>(false,"教学单元名称不能为空",null);
+        }*/
 
         int isSuccess;
 
@@ -142,14 +153,14 @@ public class UnitController {
          *
          * @Date 2017/12/17 19:20
          * @author students_ManagementSchool
-         * @param unit
+         * @param map
          * @return
          * @since JDK 1.8
          * @condition 获取某章的所有小节
     */
     @ResponseBody
     @RequestMapping(value = "/getUnitsByChapter",method = RequestMethod.POST)
-    public Result<List<Unit>> getUnitsByChapter(@RequestBody Unit unit){
+    /*public Result<List<Unit>> getUnitsByChapter(@RequestBody Unit unit){
 
         String chapter_id=unit.getChapter_id();
         if (chapter_id==null||chapter_id.trim().isEmpty()){
@@ -165,7 +176,30 @@ public class UnitController {
         }
 
         return new Result<>(true,"获取成功",units);
+    }*/
+
+    public Result<PageResult<Unit>> getUnitsByChapter(@RequestBody Map map){
+
+        /*int startPage=(int)map.get("iDisplayStart");
+        int pageSize=(int)map.get("iDisplayLength");
+        String chapter_id=(String)map.get("chapter_id");*/
+
+        PageResult<Unit> units;
+
+
+        /*if (chapter_id==null||chapter_id.trim().isEmpty()){
+            return new Result<>(false,"传参错误",null);
+        }*/
+
+        try{
+            units=unitService.getUnitsByPage_chapter(map);
+        }catch(Exception e){
+            return new Result<>(false,"获取失败",null);
+        }
+
+        return new Result<>(true,"获取成功",units);
     }
+
 
     /**   
          * 
