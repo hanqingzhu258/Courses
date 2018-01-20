@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="font/iconfont.css">
 </head>
 
-<body>
+<body class="bg-gray">
 <header class="header">
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-right ">
@@ -130,17 +130,17 @@
                                 <input style="display: none" type="text" name="" id="selectSerialId"/>
                                 <label for="selectChapterSerialNumber">请选择本课序号:</label>
                                 <select id="selectChapterSerialNumber" style="width: 500px" class="form-control">
-                                    <option value="">请选择本章序号</option>
-                                    <option value="第1章">第1章</option>
-                                    <option value="第2章">第2章</option>
-                                    <option value="第3章">第3章</option>
-                                    <option value="第4章">第4章</option>
-                                    <option value="第5章">第5章</option>
-                                    <option value="第6章">第6章</option>
-                                    <option value="第7章">第7章</option>
-                                    <option value="第8章">第8章</option>
-                                    <option value="第9章">第9章</option>
-                                    <option value="第10章">第10章</option>
+                                    <option value="">请选择本课序号</option>
+                                    <option value="第1课">第1课</option>
+                                    <option value="第2课">第2课</option>
+                                    <option value="第3课">第3课</option>
+                                    <option value="第4课">第4课</option>
+                                    <option value="第5课">第5课</option>
+                                    <option value="第6课">第6课</option>
+                                    <option value="第7课">第7课</option>
+                                    <option value="第8课">第8课</option>
+                                    <option value="第9课">第9课</option>
+                                    <option value="第10课">第10课</option>
                                 </select>
                             </div>
 
@@ -160,18 +160,17 @@
             <div class="row">
                 <div class="col-md-4">
                     <select class="form-control" id="selectupdateSerial" name="">
-
-                        <option value="">请选择本章序号</option>
-                        <option value="第1章">第1章</option>
-                        <option value="第2章">第2章</option>
-                        <option value="第3章">第3章</option>
-                        <option value="第4章">第4章</option>
-                        <option value="第5章">第5章</option>
-                        <option value="第6章">第6章</option>
-                        <option value="第7章">第7章</option>
-                        <option value="第8章">第8章</option>
-                        <option value="第9章">第9章</option>
-                        <option value="第10章">第10章</option>
+                        <option value="">请选择本课序号</option>
+                        <option value="第1课">第1课</option>
+                        <option value="第2课">第2课</option>
+                        <option value="第3课">第3课</option>
+                        <option value="第4课">第4课</option>
+                        <option value="第5课">第5课</option>
+                        <option value="第6课">第6课</option>
+                        <option value="第7课">第7课</option>
+                        <option value="第8课">第8课</option>
+                        <option value="第9课">第9课</option>
+                        <option value="第10课">第10课</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -200,26 +199,19 @@
             <hr/>
             <div class="row">
                 <div class="col-md-9">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="officeListTable">
                         <thead>
                         <tr class="active">
                             <td>序号</td>
                             <td>中文描述</td>
-                            <td>资料类型</td>
+                            <td>资料名称</td>
+                            <td>演示</td>
                             <td>更新</td>
                             <td>删除</td>
-                            <td>演示</td>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>序号</td>
-                            <td>中文描述</td>
-                            <td>资料类型</td>
-                            <td>更新</td>
-                            <td>删除</td>
-                            <td>演示</td>
-                        </tr>
+
                         </tbody>
                     </table>
                     <div class="panel panel-default">
@@ -260,63 +252,13 @@
             </div>
             <div class="row">
                 <div class="">
-                  <div class="col-md-4">  <label class="h4 text-right" for="zhishidinaSelect">添加知识点:</label></div>
-                   <div class="col-md-4"> <select name="" id="zhishidinaSelect" class="form-control"></select></div>
+                  <div class="col-md-4">  <label class="h4 text-right" for="zhishidianSelect">添加知识点:</label></div>
+                   <div class="col-md-4"> <select name="" id="zhishidianSelect" class="form-control"></select></div>
                    <div class="col-md-4"> <button class="btn btn-primary btn-block" onclick="addzhishidianSelect()">添加</button></div>
                 </div>
             </div>
             <hr/>
-            <div class="row">
-                <div class="col-md-9">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr class="active">
-                            <td>序号</td>
-                            <td>中文描述</td>
-                            <td>资料类型</td>
-                            <td>更新</td>
-                            <td>删除</td>
-                            <td>演示</td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>序号</td>
-                            <td>中文描述</td>
-                            <td>资料类型</td>
-                            <td>更新</td>
-                            <td>删除</td>
-                            <td>演示</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <p class="panel-title">本章习题</p>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-inline">
-                                <div class="report-file">
 
-                                    <span>上传文件</span>
-                                    <input tabindex="3" id="workfilepreview" size="3" name="report" class="file-prew"
-                                           type="file" onchange="showFileName()"/>
-                                </div>
-                                <input type="text" id="worktextName" style="width: 600px" class="form-control"/>
-                                <button class="btn btn-primary" onclick="uploadFile()">上传</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <h5>待提交列表</h5>
-                    <div id="uploadFiles2">
-
-                    </div>
-                    <button class="btn btn-primary" onclick="addFilesToCourse()">添加到本课</button>
-                </div>
-
-            </div>
         </div>
     </div>
 </section>

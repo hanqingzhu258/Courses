@@ -2,10 +2,7 @@ package com.hfut.glxy.service.impl;
 
 import com.hfut.glxy.entity.*;
 import com.hfut.glxy.mapper.*;
-import com.hfut.glxy.service.ChapterService;
-import com.hfut.glxy.service.InforService;
-import com.hfut.glxy.service.KnowledgePointService;
-import com.hfut.glxy.service.UnitService;
+import com.hfut.glxy.service.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -70,6 +67,8 @@ public class InforServiceImpl implements InforService {
     private Unit_OfficeDao unit_officeDao;
     @Resource
     private Video_PictureDao video_pictureDao;
+    @Resource
+    private CourseGroupService courseGroupService;
     /**
      *
      * @Date 2017/12/6 15:26
@@ -471,9 +470,134 @@ public class InforServiceImpl implements InforService {
         }
         map.put("videos_chapter",videos_chapter);
 
-
-
         return map;
+    }
+
+    /**
+         *
+         * @Date 2018/1/19 16:46
+         * @author students_ManagementSchool
+         * @return
+         * @since JDK 1.8
+         * @condition  获取首页的信息：课程组名，课程名，课程类型（核心、辅助）、课程id、课程图片
+    */
+    @Override
+    public List<Map> getHomepageInfo() throws Exception{
+
+        List<Map> courseGroups=courseGroupService.getAllCourseGroups();
+
+        if (courseGroups==null){
+            return null;
+        }
+
+        for (Map mapC:courseGroups){
+
+            CourseGroup courseGroup=(CourseGroup) mapC.get("courseGroup");
+            String courseGroup_id=courseGroup.getId();
+            List<String> course_ids=courseGroup_courseDao.getAllCoursesByCourseGroup(courseGroup_id);
+            if (course_ids==null){
+                mapC.put("keyCourses",null);
+                mapC.put("ordinaryCourses",null);
+                continue;
+            }
+
+            List<Map> keyCourseMaps=new ArrayList<>();
+            List<Map> ordinaryCourseMaps=new ArrayList<>();
+
+            for (String course_id:course_ids){
+
+                Course course=courseDao.queryCourseById(course_id);
+                if (course==null){
+                    throw new RuntimeException("课程不存在");
+                }
+                Picture picture=null;
+                String picture_id=course_pictureDao.getCurrentPictureIdByCourse(course_id);
+                if (picture_id!=null){
+                    picture=pictureDao.queryPictureById(picture_id);
+                    if (picture==null){
+                        throw new RuntimeException("课程图片不存在");
+                    }
+                }
+
+                //辅助与核心课程的判断
+                String type=course.getType();
+                if ("核心课程".equals(type)){
+                    Map keyCourseMap=new HashMap();
+                    keyCourseMap.put("course",course);
+                    keyCourseMap.put("picture",picture);
+                    keyCourseMaps.add(keyCourseMap);
+                }else if ("辅助课程".equals(type)){
+                    Map ordinaryCourseMap=new HashMap();
+                    ordinaryCourseMap.put("course",course);
+                    ordinaryCourseMap.put("picture",picture);
+                    ordinaryCourseMaps.add(ordinaryCourseMap);
+                }else{
+
+                }
+
+            }
+
+            mapC.put("keyCourses",keyCourseMaps);
+            mapC.put("ordinaryCourse",ordinaryCourseMaps);
+
+        }
+
+        return courseGroups;
+    }
+
+    /**   
+         * 
+         * @Date 2018/1/19 17:49
+         * @author students_ManagementSchool
+         * @return
+         * @since JDK 1.8
+         * @condition  获取教师团队
+    */
+    @Override
+    public List<Map> getTeacherTeam() throws Exception{
+
+        List<Map> courseGroups=courseGroupService.getAllCourseGroups();
+        if (courseGroups==null){
+            return null;
+        }
+
+        for(Map mapC:courseGroups){
+
+            CourseGroup courseGroup=(CourseGroup) mapC.get("courseGroup");
+            String courseGroup_id=courseGroup.getId();
+
+            List<Map> teacherMaps=new ArrayList<>();
+            List<String> teacher_ids=courseGroup_teacherDao.getAllTeachersByCourseGroup(courseGroup_id);
+            if (teacher_ids==null){
+                mapC.put("teachers",null);
+                continue;
+            }
+
+            for (String teacher_id:teacher_ids){
+                Map teacherMap=new HashMap();
+                Teacher teacher=teacherDao.queryTeacherById(teacher_id);
+                if (teacher==null){
+                    throw new RuntimeException("教师不存在");
+                }
+                Picture picture=null;
+                String picture_id=teacher_pictureDao.getCurrentPictureIdByTeacher(teacher_id);
+                if (picture_id!=null){
+                    picture=pictureDao.queryPictureById(picture_id);
+                    if (picture==null){
+                        throw new RuntimeException("课程图片不存在");
+                    }
+                }
+
+                teacherMap.put("teacher",teacher);
+                teacherMap.put("picture",picture);
+
+                teacherMaps.add(teacherMap);
+            }
+
+            mapC.put("teachers",teacherMaps);
+        }
+
+        return courseGroups;
     }
 
 

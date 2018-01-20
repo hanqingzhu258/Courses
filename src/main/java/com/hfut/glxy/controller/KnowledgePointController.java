@@ -3,6 +3,7 @@ package com.hfut.glxy.controller;
 import com.hfut.glxy.dto.Result;
 import com.hfut.glxy.entity.KnowledgePoint;
 import com.hfut.glxy.entity.Unit;
+import com.hfut.glxy.mapper.KnowledgePointDao;
 import com.hfut.glxy.service.KnowledgePointService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,8 @@ public class KnowledgePointController {
 
     @Resource
     private KnowledgePointService knowledgePointService;
+    @Resource
+    private KnowledgePointDao knowledgePointDao;
 
     /**   
          * 
@@ -326,7 +329,7 @@ public class KnowledgePointController {
     */
     @ResponseBody
     @RequestMapping(value = "/addUnit_knowledgePointRelation",method = RequestMethod.POST)
-    public Result<String> addRelation(@RequestBody KnowledgePoint knowledgePoint){
+    public Result<KnowledgePoint> addRelation(@RequestBody KnowledgePoint knowledgePoint){
 
         if (knowledgePoint.getUnit_id()==null||knowledgePoint.getUnit_id().trim().isEmpty()){
             return new Result<>(false,"课时id未选择",null);
@@ -347,7 +350,9 @@ public class KnowledgePointController {
             return new Result<>(false,"未知错误",null);
         }
 
-        return new Result<>(true,"添加成功",null);
+        knowledgePoint= knowledgePointDao.queryKnowledgePointById(knowledgePoint.getId());
+
+        return new Result<>(true,"添加成功",knowledgePoint);
 
     }
 

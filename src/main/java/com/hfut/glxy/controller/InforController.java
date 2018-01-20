@@ -4,6 +4,7 @@ import com.hfut.glxy.dto.Result;
 import com.hfut.glxy.entity.*;
 import com.hfut.glxy.mapper.PictureDao;
 import com.hfut.glxy.service.InforService;
+import javafx.scene.chart.ValueAxis;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.Adler32;
 
 /**
  * ProjectName: Courses <br/>
@@ -227,5 +229,53 @@ public class InforController {
 
         return new Result<>(true,"获取成功",map);
 
+    }
+
+    /**   
+         * 
+         * @Date 2018/1/19 16:43
+         * @author students_ManagementSchool
+         * @return
+         * @since JDK 1.8
+         * @condition  获取首页的信息：课程组名，课程名，课程类型（核心、辅助）、课程id、课程图片
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getHomepageInfo",method = RequestMethod.GET)
+    public Result<List<Map>> getHomepageInfo(){
+
+        List<Map> maps=null;
+
+        try{
+            maps=inforService.getHomepageInfo();
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result<>(true,"获取失败",maps);
+        }
+
+        return new Result<>(true,"获取成功",maps);
+    }
+
+    /**
+         *
+         * @Date 2018/1/19 17:53
+         * @author students_ManagementSchool
+         * @return
+         * @since JDK 1.8
+         * @condition  获取教学团队
+    */
+    @ResponseBody
+    @RequestMapping(value = "/getTeacherTeam",method = RequestMethod.GET)
+    public Result<List<Map>> getTeacherTeam() {
+
+        List<Map> maps;
+
+        try{
+            maps=inforService.getTeacherTeam();
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result<>(false,"获取失败",null);
+        }
+
+        return new Result<>(true,"获取成功",maps);
     }
 }

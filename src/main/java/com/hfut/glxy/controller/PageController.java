@@ -56,7 +56,7 @@ public class PageController {
      */
     @RequestMapping(value = "/superadmin", method = RequestMethod.GET)
     public String superadmin() {
-        return "/superadmin/index";
+        return "/superadmin/superindex";
     }
     @RequestMapping(value = "/addCourseGroup", method = RequestMethod.GET)
     public String addCourseGroup() {
@@ -75,7 +75,7 @@ public class PageController {
         return "/superadmin/courseList";
     } @RequestMapping(value = "/superadminsidebar", method = RequestMethod.GET)
     public String superadminsidebar() {
-        return "/superadmin/sidebar";
+        return "/superadmin/supersidebar";
     }
     /*@RequestMapping(value = "/addChapter", method = RequestMethod.GET)
     public String addchapter() {
@@ -95,7 +95,7 @@ public class PageController {
     }
     @RequestMapping(value = "/superadminWelcome", method = RequestMethod.GET)
     public String superadminWelcome() {
-        return "/superadmin/welcome";
+        return "/superadmin/superwelcome";
     }
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -110,11 +110,17 @@ public class PageController {
      */
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String adminIndex() {
-        return "/admin/index";
+        return "/admin/adminindex";
     }
-    @RequestMapping(value = "/sidebar", method = RequestMethod.GET)
-    public String sidebar() {
-        return "/admin/sidebar";
+    @RequestMapping(value = "/adminsidebar", method = RequestMethod.GET)
+    public String adminsidebar() {
+        return "/admin/adminsidebar";
+    } @RequestMapping(value = "/addInfo", method = RequestMethod.GET)
+    public String addInfo() {
+        return "/admin/addInfo";
+    } @RequestMapping(value = "/infoList", method = RequestMethod.GET)
+    public String infoList() {
+        return "/admin/infoList";
     }
     @RequestMapping(value = "/addChapter", method = RequestMethod.GET)
     public String addChapter() {
@@ -152,9 +158,9 @@ public class PageController {
     public String homeworkList() {
         return "/admin/homeworkList";
     }
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    public String welcome() {
-        return "/admin/welcome";
+    @RequestMapping(value = "/adminwelcome", method = RequestMethod.GET)
+    public String adminwelcome() {
+        return "/admin/adminwelcome";
     }
 
 

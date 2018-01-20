@@ -2,6 +2,7 @@ package com.hfut.glxy.service;
 
 import com.hfut.glxy.entity.Course;
 import com.hfut.glxy.entity.CourseGroup;
+import org.apache.velocity.app.event.implement.EscapeXmlReference;
 
 import java.util.List;
 import java.util.Map;
@@ -91,6 +92,25 @@ public interface InforService {
     */
     Map getUnitDetail(String unit_id) throws Exception;
 
+    /**
+         *
+         * @Date 2018/1/19 16:45
+         * @author students_ManagementSchool
+         * @return
+         * @since JDK 1.8
+         * @condition  获取首页的信息：课程组名，课程名，课程类型（核心、辅助）、课程id、课程图片
+    */
+    List<Map> getHomepageInfo() throws Exception;
 
+    /**
+         *
+         * @Date 2018/1/19 17:36
+         * @author students_ManagementSchool
+         * @return
+         * @since JDK 1.8
+         * @condition  获取教师团队：课程组名，课程组id（方便点击获取教师）；教师：头像、姓名、职称、个人简介（pdf链接）、性别
+
+     */
+    List<Map> getTeacherTeam() throws Exception;
 
 }

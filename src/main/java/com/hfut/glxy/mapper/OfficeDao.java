@@ -1,10 +1,13 @@
 package com.hfut.glxy.mapper;
 
+import com.hfut.glxy.entity.Course;
 import com.hfut.glxy.entity.CourseInfo;
 import com.hfut.glxy.entity.Office;
 import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * ProjectName: Courses <br/>
@@ -69,5 +72,18 @@ public interface OfficeDao {
     */
     @Delete("delete from office where id=#{id}")
     Integer deleteOfficeById(@Param("id") Integer id);
+
+    /**
+         *
+         * @Date 2018/1/19 15:42
+         * @author students_ManagementSchool
+         * @param startPage
+         * @param pageSize
+         * @return
+         * @since JDK 1.8
+         * @condition  分页获取某一教学单元的教学资料
+    */
+    @Select("select * from office limit #{startPage},#{pageSize}")
+    List<Course> getOfficesByUnit(@Param("startPage") Integer startPage, @Param("pageSize") Integer pageSize);
 
 }

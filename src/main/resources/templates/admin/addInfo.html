@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="font/iconfont.css">
 </head>
 
-<body>
+<body class="bg-gray">
 <header class="header">
     <nav class="navbar navbar-default" role="navigation">
         <div class="navbar-right ">
@@ -58,16 +58,16 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="homeworkTitle">请输入通知标题:</label>
-                                    <input type="text"  placeholder="这里是通知标题" name="homeworkTitle" class="form-control" id="homeworkTitle">
+                                    <label for="infoTitle">请输入通知标题:</label>
+                                    <input type="text"  placeholder="这里是通知标题" name="infoTitle" class="form-control" id="infoTitle">
                                 </div>
                             </div>
                             <div class="col-md-12 ">
                                 <!--这里是富文本编辑器-->
                                 <div class="form-group">
-                                    <div id="homeworkContent" class="z-index-bottom"></div>
+                                    <div id="infoContent" class="z-index-bottom"></div>
                                     <p></p>
-                                    <button class="btn btn-primary btn-block" onclick="addHomework()">添加</button>
+                                    <button class="btn btn-primary btn-block" onclick="addInformation()">添加</button>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
 <script type="text/javascript" src="js/addHomework.js"></script>
 <script type="text/javascript">
     var E = window.wangEditor;
-    var editor = new E('#homeworkContent');
+    var editor = new E('#infoContent');
     // 或者 var editor = new E( document.getElementById('editor') )
     editor.create()
 </script>
