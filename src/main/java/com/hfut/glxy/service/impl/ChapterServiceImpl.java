@@ -1,16 +1,20 @@
 package com.hfut.glxy.service.impl;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.entity.Chapter;
 import com.hfut.glxy.entity.Course;
 import com.hfut.glxy.mapper.*;
 import com.hfut.glxy.mapper.Course_ChapterDao;
 import com.hfut.glxy.service.ChapterService;
+import org.apache.tomcat.util.buf.CharChunk;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ProjectName: Courses <br/>
@@ -206,4 +210,46 @@ public class ChapterServiceImpl implements ChapterService {
 
         return chapters;
     }
+
+    /**
+         *
+         * @Date 2018/1/20 20:58
+         * @author students_ManagementSchool
+         * @param map
+         * @return
+         * @since JDK 1.8
+         * @condition 分页获取章
+    */
+    @Override
+    public PageResult<Chapter> getChaptersByPage(Map map) throws Exception{
+
+        int startPage=(int)map.get("iDisplayStart");
+        int pageSize=(int)map.get("iDisplayLength");
+        String course_id=(String)map.get("course_id");
+
+        PageResult<Chapter> chapterPageResult=new PageResult<>();
+
+        Integer totalCount=course_chapterDao.getCountByCourse(course_id);
+        chapterPageResult.setiTotalDisplayRecords(totalCount);
+        chapterPageResult.setiTotalRecords(totalCount);
+
+        List<Chapter> chapters=new ArrayList<>();
+        String [] chapter_ids=course_chapterDao.getChaptersByPage(course_id,startPage,pageSize);
+        if (chapter_ids==null){
+            return null;
+        }
+        for (String chapter_id:chapter_ids){
+            Chapter chapter=chapterDao.queryChapterById(chapter_id);
+            if (chapter==null){
+                throw new RuntimeException("章不存在");
+            }
+            chapters.add(chapter);
+        }
+
+        chapterPageResult.setData(chapters);
+
+        return chapterPageResult;
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.hfut.glxy.controller;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.dto.Result;
 import com.hfut.glxy.entity.Chapter;
 import com.hfut.glxy.service.ChapterService;
@@ -10,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import javax.xml.ws.soap.Addressing;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.zip.Adler32;
 
 /**
  * ProjectName: Courses <br/>
@@ -228,6 +232,36 @@ public class ChapterController {
         }catch (Exception e){
             e.printStackTrace();
             return new Result<>(false,"数据获取异常",null);
+        }
+
+        return new Result<>(true,"获取成功",chapters);
+    }
+
+    /**
+         *
+         * @Date 2018/1/20 21:01
+         * @author students_ManagementSchool
+         * @param map
+         * @return
+         * @since JDK 1.8
+         * @condition  分页获取章
+    */
+    @ResponseBody
+    @RequestMapping(value = "/getChaptersByPage",method = RequestMethod.POST)
+    public Result<PageResult<Chapter>> getChaptersByPage(@RequestBody Map map){
+
+        String course_id=(String)map.get("course_id");
+        if (course_id==null||course_id.trim().isEmpty()){
+            return new Result<>(false,"未选择课程",null);
+        }
+
+        PageResult<Chapter> chapters;
+
+        try{
+            chapters=chapterService.getChaptersByPage(map);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result<>(false,"获取失败",null);
         }
 
         return new Result<>(true,"获取成功",chapters);

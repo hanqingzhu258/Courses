@@ -1,8 +1,10 @@
 package com.hfut.glxy.service;
 
+import com.hfut.glxy.dto.PageResult;
 import com.hfut.glxy.entity.Chapter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ProjectName: Courses <br/>
@@ -79,4 +81,16 @@ public interface ChapterService {
          * @condition  获取某一课程的全部章节
     */
     List<Chapter> getChaptersByCourse(String course_id) throws Exception;
+
+    /**
+         *
+         * @Date 2018/1/20 20:44
+         * @author students_ManagementSchool
+         * @param map
+         * @return
+         * @since JDK 1.8
+         * @condition  分页获取章
+    */
+    PageResult<Chapter> getChaptersByPage(Map map) throws Exception;
+
 }

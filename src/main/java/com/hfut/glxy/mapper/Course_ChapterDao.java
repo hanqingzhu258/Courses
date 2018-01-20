@@ -2,6 +2,7 @@ package com.hfut.glxy.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * ProjectName: Courses <br/>
@@ -65,5 +66,33 @@ public interface Course_ChapterDao {
     */
     @Select("select chapter_id from course_chapter where course_id=#{course_id} and isDelete=0")
     String [] getChaptersByCourse(@Param("course_id") String course_id);
+
+    /**
+         *
+         * @Date 2018/1/20 20:49
+         * @author students_ManagementSchool
+         * @param course_id
+         * @param startPage
+         * @param pageSize
+         * @return
+         * @since JDK 1.8
+         * @condition   分页获取章
+    */
+    @Select("select chapter_id from (select chapter_id from course_chapter where course_id=#{course_id} and " +
+            "isDelete=0) as test limit #{startPage},#{pageSize}")
+    String [] getChaptersByPage(@Param("course_id") String course_id,@Param("startPage") Integer startPage,
+                                @Param("pageSize") Integer pageSize);
+
+    /**   
+         * 
+         * @Date 2018/1/20 20:54
+         * @author students_ManagementSchool
+         * @param course_id
+         * @return
+         * @since JDK 1.8
+         * @condition  获取课程总章数
+    */
+    @Select("select count(*) from course_chapter where course_id=#{course_id} and isDelete=0")
+    Integer getCountByCourse(@Param("course_id") String course_id);
 
 }

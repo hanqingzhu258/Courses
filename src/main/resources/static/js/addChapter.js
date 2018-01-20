@@ -689,6 +689,54 @@ function addModalKP() {
 
 }
 
+//释放知识点和教学单元的关联
+function releaseModalRelation(id) {
+
+    $.ajax({
+        url: 'http://localhost:8080/releaseUnit_knowledgePointRelation',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({
+            id: id,
+            unit_id: $("#uid").val()
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+
+            alert(data.message);
+
+            //移除本单元该知识点
+            $("#modalKPList").find("span").each(function () {
+
+                if (this.getAttribute("id")==id){
+                    this.remove();
+                    return 0;
+                }
+
+            });
+
+            //---------------------------------------------
+            if ($("#unitIdInput").val()==$("#uid").val()){
+                $("#updatezhishidianList").find("span").each(function () {
+                    if (this.getAttribute("id")==id){
+                        this.remove();
+                        return 0;
+                    }
+                })
+            };
+
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
 
 //------------------------------------!!!!!模态框操作结束---------------------------------------------------------------------
 
