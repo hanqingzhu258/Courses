@@ -13,16 +13,16 @@ $(document).ready(function () {
         cache: false
     })
         .done(function (data) {
-            /*console.log($("#courid").val());
+            console.log($("#courid").val());
             console.log("success");
-            console.log(data);*/
+            console.log(data);
             // console.log(data.data.CourseName);
             var temp = "";
             for (var i = data.data.teachers.length - 1; i >= 0; i--) {
                 temp += data.data.teachers[i].name;
             }
-            /*console.log(temp);
-            console.log(data.data.teachers[0].name)*/
+            console.log(temp);
+            console.log(data.data.teachers[0].name)
             $("#CourseTeacher").val(temp);
             $("#inCourseGroup").val(data.data.courseGroup.name);
             $("#CourseNumber").val(data.data.course.number);
@@ -64,7 +64,7 @@ function updateWelcomeCourse() {
         cache: false
     })
         .done(function (data) {
-            /*console.log($("#courid").val());*/
+            console.log($("#courid").val());
            $(".onupdate").show().delay(1000).hide(300);
            setTimeout(function () { $(".update-success").show('slow', function () {
 

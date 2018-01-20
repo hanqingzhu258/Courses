@@ -1,22 +1,22 @@
 $(document).ready(function() {
     'use strict';
     $.ajax({
-            url: 'http://localhost:8080/getAllChapters',
+            url: 'https://www.easy-mock.com/mock/5a50c209aaeb8a0aa380acba/courseadmin/comment',
             type: 'get',
             timeout: 5000,
             contentType: 'application/json; charset=UTF-8',
             cache: false
         })
         .done(function(data) {
-            // console.log(data.data);
+            console.log(data.data);
             // alert(data.data[0].name)
             // todo 这里显示表格内容
-            $("#courseList").dataTable({
-                "data": data.data,
+            $("#commentListTable").dataTable({
+                "data": data.data.comment,
 
                 "columns": [
-                    { "data": "number" },
-                    { "data": "name" },
+                    { "data": "commenter" },
+                    { "data": "commentcontent" },
 
                     { "data": null },
                     { "data": null }
@@ -54,20 +54,20 @@ $(document).ready(function() {
                         return "<a type='button' class='btn btn-primary"
 
                             +
-                            "' data-toggle='modal' data-target='#chaptermodal' onclick='showdeChapterDetails('" +
-                            "')' href='#'>详情</a>"
+                            "'  data-toggle='modal' data-target='#commentmodal'  onclick='showCommentDetails(\"" +
+                            "\")' href='#'>详情</a>"
                     }
 
                 }, {
                     targets: 3,
                     render: function(data, type, row, meta) {
-                        console.log("2." + data);
+                        // console.log("2." + data);
                         return "<a type='button' class='btn btn-danger"
 
                             +
-                            "' onclick='delchapter(\""
+                            "' onclick='delComment(\"" +
+                            row.id +
 
-                            +
                             "\")' href='#'>删除</a>"
 
 
@@ -82,39 +82,26 @@ $(document).ready(function() {
         .always(function() {
             console.log("complete");
         });
-
+    $('[data-toggle="tooltip"]').tooltip()
 });
-function showdeChapterDetails() {
-    $.ajax({
-        url: '/path/to/file',
-        type: 'get',
-        dataType: 'json',
-        timeout: 5000,
-        cache: false,
-        contentType: 'application/json; charset=UTF-8'
-    })
-    .done(function() {
-        console.log("success");
-    })
-    .fail(function() {
-        console.log("error");
-    })
-    .always(function() {
-        console.log("complete");
-    });
 
-}
-function delchapter() {
+function showCommentDetails() {
+
     $.ajax({
-        url: '/path/to/file',
-        type: 'get',
-        dataType: 'json',
-        timeout: 5000,
-        cache: false,
-        contentType: 'application/json; charset=UTF-8'
-    })
-        .done(function() {
+            url: 'https://www.easy-mock.com/mock/5a50c209aaeb8a0aa380acba/courseadmin/commentList',
+            type: 'get',
+            // data: JSON.stringify({
+            //     "id": comid
+            // }),
+            timeout: 5000,
+            contentType: 'application/json; charset=UTF-8',
+            cache: false
+        })
+        .done(function(data) {
+            console.log(data)
             console.log("success");
+            $("#commentpeople").val(data.data.commentlist.commenter);
+            $("#commenttent").val(data.data.commentlist.commentcontent);
         })
         .fail(function() {
             console.log("error");
@@ -122,4 +109,14 @@ function delchapter() {
         .always(function() {
             console.log("complete");
         });
+
+}
+
+$("label").click(function(event) {
+    $('#commentpeole').tooltip('toggle')
+    /* Act on the event */
+});
+
+function delComment(delid) {
+
 }

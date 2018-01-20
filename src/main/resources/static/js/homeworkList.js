@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: 'json/homeworkList.json',
+        url: 'http://3y5z5q.natappfree.cc/homework/1',
         type: 'get',
         dataType: 'json',
         timeout: 5000,
@@ -19,14 +19,16 @@ $(document).ready(function () {
     }
 
 //datatables的ajax方法
-    function succeedFunction(data) {
-        console.log(data.data)
+    function succeedFunction(data1) {
+        console.log(data1.data);
+        // console.log(data.data.homework[0].strName)
         $("#homeworkListDetails").dataTable({
-            "data": data.data,
+            "data": data1.data.list,
 
             "columns": [
-                {"data": "stNumber"},
-                {"data": "stName"},
+                {"data": "id"},
+                {"data": "name"},
+                {"data": "file"},
                 {"data": null},
                 {"data": null}
 
@@ -57,24 +59,21 @@ $(document).ready(function () {
                 }
             },
             columnDefs: [{
-                targets: 2,
+                targets: 3,
                 render: function (data, type, row, meta) {
-                    /*console.log(data)*/
+                    console.log(data)
                     return "<a type='button' class='btn btn-primary"
 
-                        + "' onclick='showdetails(\""
-                        + "\")' href='#'>详情</a>"
+                        + "'   href='http://3y5z5q.natappfree.cc/file"+data.fileUrl+"' target='_blank'>详情</a>"
                 }
 
             }, {
-                targets: 3,
+                targets: 4,
                 render: function (data, type, row, meta) {
 
                     return "<a type='button' class='btn btn-danger"
 
-                        + "' onclick='delcgroup(\""
-
-                        + "\")' href='#'>删除</a>"
+                        + "' onclick='delHomework("+row.id+")'   href='#'>删除</a>"
 
 
                 }
@@ -85,11 +84,60 @@ $(document).ready(function () {
     }
 
 });
+//
+// function showHomeworkDetails(id) {
+//
+//     $.ajax({
+//         url: 'http://3y5z5q.natappfree.cc/homework/1',
+//         type: 'get',
+//         data:JSON.stringify({
+//             "id":id
+//         }),
+//         dataType: 'json',
+//         timeout: 5000,
+//         cache: false,
+//         contentType: 'application/json; charset=UTF-8'
+//     })
+//         .done(function (data) {
+//            $("#stname").val(data.data.name);
+//             $("#homeworkname").val(data.data.officeId);
+//         })
+//         .fail(function () {
+//             console.log("error");
+//         })
+//         .always(function () {
+//             console.log("complete");
+//         });
+// }
 
-function showdetails() {
+function delHomework(id) {
 
-}
+    $.ajax({
+        url: 'http://3y5z5q.natappfree.cc/homework/'+id,
+        type: 'post',
+        dataType: 'json',
+        data:JSON.stringify({
+            "id":id
+        }),
+        timeout: 5000,
+        cache: false,
+        contentType: 'application/json; charset=UTF-8'
+    })
+        .done(function (data) {
+            if (data.success === true) {
+                alert(data.message);
+                window.location.reload();
+            } else {
+                alert(data.message);
+            }
 
-function delcgroup() {
 
+            console.log("success");
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
 }

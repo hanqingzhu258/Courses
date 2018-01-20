@@ -1,13 +1,17 @@
 var editor;
-
+var modalEditor;
 $(document).ready(function () {
     'use strict';
     $('[data-toggle="popover"]').popover()
 
     var E = window.wangEditor;
     editor = new E('#mywangeditor');
-    // 或者 var editor = new E( document.getElementById('editor') )
+    // 或者 var editor = new E( docum
+    // ent.getElementById('editor') )
     editor.create();
+    ;
+    modalEditor = new E('#showEditor');
+    modalEditor.create();
 
     /*     console.log(editor.txt.html());*/
 });
@@ -209,7 +213,8 @@ var refreshDataTable = function () {
                 return "<a type='button' class='btn btn-primary"
                     + "' onclick='queryUnitById(\""
                     + data.id
-                    + "\")'  href='#'>详情</a>"
+                    + "\")'  href='#' data-toggle=\"modal\" data-target=\"#unitModal\">详情</a>"
+
             }
         }, {
             targets: 4,
@@ -287,6 +292,7 @@ function deleteUnit(id) {
     });
 }
 
+//------------------------------------!!!!!模态框操作---------------------------------------------------------------------
 //获取某一教学单元的详细信息
 function queryUnitById(id) {
     $.ajax({
@@ -302,7 +308,30 @@ function queryUnitById(id) {
         async: false,
         success: function (data) {
 
+            console.log(data);
             //展示教学单元详情的操作
+            $("#unumber").val(data.data.unit.number)//教学单元编号
+            $("#uname").val(data.data.unit.name);//教学单元名称
+            $("#uid").val(data.data.unit.id);//教学单元id
+            modalEditor.txt.html(data.data.unit.content);//教学单元详情
+
+            //显示教学资料列表（模态框）
+            refreshModalDataTable();
+
+            console.log($("#unitIdInput").val());
+            console.log($("#uid").val());
+            console.log(id);
+
+            //显示已有知识点
+            /*if ($("#unitIdInput").val()!=$("#uid").val()){
+                $("#modalKPList").empty();
+            }*/
+            $("#modalKPList").empty();
+            var kps=data.data.knowledgePoints;
+            for (var i=kps.length-1;i>=0;i--){
+                $("#modalKPList").append('<span href="#" id="' + kps[i].id + '" class="btn btn-default">' + kps[i].content + '<a href="#" class="btn btn-link" onclick=releaseModalRelation("' + kps[i].id + '")>删除</a></span>');
+            }
+
 
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -313,6 +342,355 @@ function queryUnitById(id) {
     });
 }
 
+//模态框中教学单元详情中的资料获取
+var refreshModalDataTable = function () {
+
+    $('#modalFileList').dataTable().fnClearTable();    //清空数据
+    $('#modalFileList').dataTable().fnDestroy();         //销毁datatable
+
+    $('#modalFileList').DataTable({
+
+        "sPaginationType": "full_numbers",
+        "bPaginite": true,
+        "bInfo": true,
+        "bSort": true,
+        "processing": false,
+        "serverSide": true,
+        "sAjaxSource": "/getOfficesByUnit",//这个是请求的地址
+        "fnServerData": retrieveModalData,
+        "searching": false,
+        "lengthChange": false,
+        "pageLength": 5,
+        "fnDrawCallback": function(){
+            var api = this.api();
+            var startIndex= api.context[0]._iDisplayStart;//获取到本页开始的条数
+            api.column(0).nodes().each(function(cell, i) {
+                cell.innerHTML = startIndex + i + 1;
+            });
+        },
+
+        "columns": [
+            {"data": null},//序号
+            {"data": "description"},//中文描述
+            {"data": "name"},//名称
+            {"data": null},//演示
+            {"data": null},//更新
+            {"data": null}//删除
+        ],
+        language: {
+            "sProcessing": "处理中...",
+            "sLengthMenu": "显示 _MENU_ 项结果",
+            "sZeroRecords": "没有匹配结果",
+            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+            "sInfoPostFix": "",
+            "sSearch": "搜索:",
+            "sUrl": "",
+            "sEmptyTable": "表中数据为空",
+            "sLoadingRecords": "载入中...",
+            "sInfoThousands": ",",
+            "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上页",
+                "sNext": "下页",
+                "sLast": "末页"
+            },
+            "oAria": {
+                "sSortAscending": ": 以升序排列此列",
+                "sSortDescending": ": 以降序排列此列"
+            }
+        },
+        columnDefs: [{
+            targets: 3,
+            render: function (data, type, row, meta) {
+                return "<a target='_blank' href='"+data.viewUrl+"'>演示</a>"
+            }
+        }, {
+            targets: 4,
+            render: function (data, type, row, meta) {
+
+                //渲染删除课程按钮
+
+                return "<a type='button' class='btn btn-danger"
+                    + "' onclick='updateModalDescription(\""
+                    + data.id
+                    + "\")' href='#'>更新</a>"
+            }
+        }, {
+            targets: 5,
+            render: function (data, type, row, meta) {
+
+                //渲染删除课程按钮
+                return "<a type='button' class='btn btn-danger"
+                    + "' onclick='deleteModalOfficeById(\""
+                    + data.id
+                    + "\")' href='#'>删除</a>"
+            }
+        }]
+
+
+    });
+}
+
+//模态框中利用ajax获取教学单元资料列表的数据
+function retrieveModalData(url, aoData, fnCallback) {
+
+    /*console.log($("#unitIdInput").val());*/
+    $.ajax({
+
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false,
+        url: url,//这个就是请求地址对应sAjaxSource
+        data: JSON.stringify({
+            "unit_id": $("#uid").val(),
+            "iDisplayStart": aoData[3].value,
+            "iDisplayLength": aoData[4].value
+        }),
+        type: 'POST',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            fnCallback(data.data);//把返回的数据传给这个方法就可以了,datatable会自动绑定数据的
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+            console.log("你的请求已经gg");
+
+        }
+    });
+}
+
+//显示模态框中的文件名称
+function showModalFileName() {
+    var inputname = $("#modalFilePreview").val();
+    $("#modalFileName").val(inputname);
+}
+
+//模态框上传资料
+function uploadModalFile(){
+    console.log("文件正在上传");
+
+    var desc = $("#modalFileDescription").val();
+    var formData = new FormData();
+    formData.append("desc", desc);
+    formData.append("file", $("#modalFilePreview")[0].files[0]);
+
+    $.ajax({
+        url: "/file/office",
+        type: 'POST',
+        data: formData,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        cache: false,
+        beforeSend: function () {
+            console.log("正在进行，请稍候");
+        },
+        success: function (data) {
+            /*console.log(data);*/
+            //将该文件显示在窗口右侧带提交列表
+            $("#uploadModalFiles").append("<div><a id='"+data.data.id+"'>"+data.data.name+"--"+data.data.description+"</a><button onclick=deleteModalUploadFile(\'"+data.data.id+"\')>删除</button></div>");
+
+            //将刚才的文件框中的内容清空
+            /*$("#textName").val("");*/
+
+        },
+        error: function () {
+            console.log("error");
+        }
+    });
+}
+
+//模态框中删除上传文件（此时还未与教学单元绑定）
+function deleteModalUploadFile(id) {
+    $.ajax({
+        url: '/deleteOfficeById',
+        type: "post",
+        dataType: 'json',
+        data: JSON.stringify({
+            "office_id":id
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+
+            /*$("#uploadModalFiles").find("a").each(function () {
+                if (this.getAttribute("id")==id){
+                    console.log(this);
+                    this.parent().hide();
+                    alert(data.message);
+                    return 0;
+                }
+            });*/
+            $("#"+id).parent().remove();
+            alert(data.message);
+
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+}
+
+//模态框中绑定教学资料与教学单元
+function addModalFilesToCourse() {
+
+    var office_ids=new Array();
+    var count=0;
+
+    $("#uploadModalFiles").find("a").each(function () {
+        office_ids[count]=this.getAttribute("id");
+        count++;
+    });
+
+    $.ajax({
+        url: '/bindUnit_offices',
+        type: "post",
+        dataType: 'json',
+        data: JSON.stringify({
+            "unit_id": $("#uid").val(),
+            "office_ids": office_ids
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+
+            alert(data.message);
+
+            //清空模态框待提交列表
+            $("#uploadModalFiles").empty();
+
+            //刷新模态框文件列表
+            refreshModalDataTable();
+            //刷新文件列表
+            refreshOfficeDataTable();
+
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
+
+//模态框中更新资料的描述方法
+function updateModalDescription() {
+
+    console.log("正在更新资料描述");
+    console.log(id);
+
+}
+
+//模态框中删除教学资料列表中的内容
+function deleteModalOfficeById(id) {
+    $.ajax({
+        url: '/deleteOfficeById',
+        type: "post",
+        dataType: 'json',
+        data: JSON.stringify({
+            "unit_id":$("#uid").val(),
+            "office_id":id
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+            alert(data.message);
+            //刷新模态框文件列表
+            refreshModalDataTable();
+            //刷新文件列表
+            refreshOfficeDataTable();
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+}
+
+//更新模态框中教学单元基本信息
+function updateModalUnit() {
+
+    $.ajax({
+        url: '/updateUnit',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({
+            "number": $("#unumber").val(),
+            "name": $("#uname").val(),
+            "id": $("#uid").val(),
+            "content": modalEditor.txt.html()
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+            alert(data.message);
+            //更新教学单元列表
+            refreshDataTable();
+        })
+        .fail(function () {
+
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
+
+//模态框关联知识点和教学单元v
+function addModalKP() {
+
+    $.ajax({
+        url: 'http://localhost:8080/addUnit_knowledgePointRelation',
+        type: 'post',
+        dataType: 'json',
+        data: JSON.stringify({
+            id: $("#modalKPSelect").val(),
+            unit_id: $("#uid").val()
+        }),
+        timeout: 5000,
+        contentType: 'application/json; charset=UTF-8',
+        cache: false
+    })
+        .done(function (data) {
+
+            alert(data.message);
+
+            $("#modalKPSelect").val("");
+            $("#modalKPList").append('<span href="#" id="' + data.data.id + '" class="btn btn-default">' + data.data.content + '<a href="#" class="btn btn-link" onclick=releaseModalRelation("' + data.data.id + '")>删除</a></span>');
+
+            if ($("#unitIdInput").val()==$("#uid").val()){
+                $("#updatezhishidianList").append('<span href="#" id="' + data.data.id + '" class="btn btn-default">' + data.data.content + '<a href="#" class="btn btn-link" onclick=releaseModalRelation("' + data.data.id + '")>删除</a></span>');
+            }
+
+        })
+        .fail(function () {
+            console.log("error");
+        })
+        .always(function () {
+            console.log("complete");
+        });
+
+}
+
+
+//------------------------------------!!!!!模态框操作结束---------------------------------------------------------------------
 
 //更新教学单元
 function updateSerialNumber() {
@@ -353,22 +731,14 @@ function showFileName() {
     $("#textName").val(inputname);
 }
 
-//显示习题名称
-function showExerciseName() {
-    var inputname = $("#exercisePreview").val();
-    $("#exerciseName").val(inputname);
-}
-
-
 //上传教学资料
 function uploadFile() {
 
     console.log("文件正在上传");
 
-    /*var name = $("#filepreview").val();*/
+    var desc = $("#fileDescription").val();
     var formData = new FormData();
-    /*var name = $("input").val();
-    formData.append("name", name);*/
+    formData.append("desc", desc);
     formData.append("file", $("#filepreview")[0].files[0]);
 
     $.ajax({
@@ -472,7 +842,7 @@ function addFilesToCourse() {
 }
 
 
-//教学单元列表的展示
+//教学资料列表的展示
 var refreshOfficeDataTable = function () {
 
     $('#officeListTable').dataTable().fnClearTable();    //清空数据
@@ -645,9 +1015,14 @@ function addZhishidian() {
 
                 alert(data.message);
 
+                //清空知识点框
                 $("#addZhishidianInput").val("");
-                $("#zhishidianList").append('<span href="#" id="' + data.data.id + '" class="btn btn-primary">' + data.data.content + '<a href="#" class="btn btn-link" onclick=deleteKnowledgePoint("' + data.data.id + '")>删除</a></span>');
+                //渲染到本章已有知识点
+                $("#zhishidianList").append('<span href="#" id="' + data.data.id + '" class="btn btn-default">' + data.data.content + '<a href="#" class="btn btn-link" onclick=deleteKnowledgePoint("' + data.data.id + '")>删除</a></span>');
+                //渲染到本单元的知识点选择框
                 $("#zhishidianSelect").append('<option value="' + data.data.id + '">' + data.data.content + '</option>');
+                //渲染到模态框中的知识点选择框
+                $("#modalKPSelect").append('<option value="' + data.data.id + '">' + data.data.content + '</option>');
             } else {
                 alert(data.message);
             }
@@ -691,6 +1066,9 @@ function deleteKnowledgePoint(id) {
             //移除选择单元知识点的选择框的选项
             $("#zhishidianSelect option[value=" + id + "]").remove();
 
+            //移除模态框中选择单元知识点的选择框的选项
+            $("#modalKPSelect option[value=" + id + "]").remove();
+
             //移除当前单元可能已被选中的知识点的span标签
             $("#updatezhishidianList").find("span").each(function () {
 
@@ -730,7 +1108,7 @@ function addzhishidianSelect() {
 
 
             $("#updatezhishidianInput").val("");
-            $("#updatezhishidianList").append('<span href="#" id="' + data.data.id + '" class="btn btn-primary">' + data.data.content + '<a href="#" class="btn btn-link" onclick=releaseRelation("' + data.data.id + '")>删除</a></span>');
+            $("#updatezhishidianList").append('<span href="#" id="' + data.data.id + '" class="btn btn-default">' + data.data.content + '<a href="#" class="btn btn-link" onclick=releaseRelation("' + data.data.id + '")>删除</a></span>');
 
         })
         .fail(function () {
@@ -796,3 +1174,4 @@ function clearUnit() {
     $("#updatezhishidianList").empty();//清空已选择的当前单元知识点
 
 }
+

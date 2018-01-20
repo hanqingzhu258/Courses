@@ -191,7 +191,7 @@ public class UnitServiceImpl implements UnitService {
         map.put("knowledgePoints",knowledgePoints);
 
         //获取office文件
-        List<Office> offices=new ArrayList<>();
+        /*List<Office> offices=new ArrayList<>();
         String [] office_ids=unit_officeDao.getOfficesByUnit(unit_id);
         if (office_ids==null){
 
@@ -204,7 +204,7 @@ public class UnitServiceImpl implements UnitService {
 
             }
         }
-        map.put("offices",offices);
+        map.put("offices",offices);*/
 
         //获取视频文件
         List<Video> videos=new ArrayList<>();
@@ -219,7 +219,7 @@ public class UnitServiceImpl implements UnitService {
             }
 
         }
-        map.put("videos",video_ids);
+        map.put("videos",videos);
 
         return map;
     }

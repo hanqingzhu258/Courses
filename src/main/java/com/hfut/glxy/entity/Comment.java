@@ -156,11 +156,11 @@ public class Comment extends Model<Comment> {
         this.studentId = studentId;
     }
 
-    public Boolean getAgreed() {
+    public Boolean getIsAgreed() {
         return isAgreed;
     }
 
-    public void setAgreed(Boolean agreed) {
+    public void setIsAgreed(Boolean agreed) {
         isAgreed = agreed;
     }
 
