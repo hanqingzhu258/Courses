@@ -1,11 +1,24 @@
 $(document).ready(function () {
+
+    console.log(document.cookie);
+
+    var course_id = "";
+    var cooks = document.cookie.split(";");
+    for (var i = 0; i < cooks.length; i++) {
+        var index = cooks[i].indexOf("course_id");
+        if (index > -1) {
+            course_id = cooks[i].split("=")[1];
+        }
+    }
+    /*console.log(course_id);*/
+
     'use strict';
     $.ajax({
         // url: 'https://www.easy-mock.com/mock/5a50c209aaeb8a0aa380acba/courseadmin/queryCourseById',
         url: 'http://localhost:8080/queryCourseById',
         type: 'post',
         data: JSON.stringify({
-            id: "54e03bc9e2d24f90aabd13bd8d6d11dd"
+            id: course_id
         }),
         dataType: 'json',
         timeout: 5000,
@@ -13,16 +26,16 @@ $(document).ready(function () {
         cache: false
     })
         .done(function (data) {
-            console.log($("#courid").val());
+            /*console.log($("#courid").val());
             console.log("success");
-            console.log(data);
+            console.log(data);*/
             // console.log(data.data.CourseName);
             var temp = "";
             for (var i = data.data.teachers.length - 1; i >= 0; i--) {
                 temp += data.data.teachers[i].name;
             }
-            console.log(temp);
-            console.log(data.data.teachers[0].name)
+            /*console.log(temp);
+            console.log(data.data.teachers[0].name)*/
             $("#CourseTeacher").val(temp);
             $("#inCourseGroup").val(data.data.courseGroup.name);
             $("#CourseNumber").val(data.data.course.number);
@@ -64,7 +77,7 @@ function updateWelcomeCourse() {
         cache: false
     })
         .done(function (data) {
-            console.log($("#courid").val());
+            /*console.log($("#courid").val());*/
            $(".onupdate").show().delay(1000).hide(300);
            setTimeout(function () { $(".update-success").show('slow', function () {
 

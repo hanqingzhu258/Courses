@@ -13,8 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
+
+import static com.baomidou.mybatisplus.generator.config.ConstVal.UTF8;
 
 
 /**
@@ -46,19 +53,22 @@ public class ManagerController {
     */
     @ResponseBody
     @RequestMapping(value="/login",method = RequestMethod.POST)
-    public Result<String> login(@RequestBody Manager manager, HttpSession session){
+    public Result<Integer> login(@RequestBody Manager manager, HttpSession session,
+                                HttpServletResponse response){
 
         String course_id=manager.getCourse_id();
 
+        int isAdmin=0;
 
         Manager managerT;
 
         try {
 
-            if (course_id == null) {
+            if (course_id == null||course_id.trim().isEmpty()) {
                 //超级管理员登录
                 managerT = managerService.querySuperManager();
 
+                isAdmin=1;
                 System.out.println("super:account"+manager.getAccount());
 
             } else {
@@ -87,7 +97,10 @@ public class ManagerController {
                 session.setAttribute("role",new Integer(2));
             }
 
-            return new Result<>(true,"登录成功",null);
+            Cookie cookie=new Cookie("course_id",course_id);
+            response.addCookie(cookie);
+
+            return new Result<>(true,"登录成功",isAdmin);
 
         }else{
             return new Result<>(false,"账号或密码错误，请重新登录",null);
@@ -109,7 +122,7 @@ public class ManagerController {
     */
     @ResponseBody
     @RequestMapping(value ="/exit",method = RequestMethod.GET)
-    public Result<String> exit(HttpSession session){
+    public Result<String> exit(HttpSession session,HttpServletRequest request,HttpServletResponse response) {
         //移除管理员id
         session.removeAttribute("id");
         //判断管理员类型
@@ -122,6 +135,25 @@ public class ManagerController {
         //移除角色
         session.removeAttribute("role");
 
+        /*Cookie [] cookies=request.getCookies();
+        try {
+            for (Cookie cookie : cookies) {
+                System.out.println(URLDecoder.decode(cookie.getName(), UTF8));
+                String name=URLDecoder.decode(cookie.getName(), UTF8);
+                if ("course_id".equals(name)){
+                    cookie.setMaxAge(0);
+                    cookie=null;
+                }
+            }
+
+            for (Cookie cookie : cookies){
+                System.out.println(URLDecoder.decode(cookie.getName(), UTF8));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result<>(false,"退出失败",null);
+        }*/
         return new Result<>(true,"退出成功",null);
     }
 

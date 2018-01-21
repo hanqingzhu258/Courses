@@ -316,12 +316,12 @@ public class CourseServiceImpl implements CourseService {
      * @since JDK 1.8
      */
     @Override
-    public List<Map> getAllCourses() {
+    public List<Course> getAllCourses() {
 
-        List<Map> maps=new ArrayList<>();
-        /*List<Course> courses= courseDao.getAllCourses();*/
+        /*List<Map> maps=new ArrayList<>();*/
+        List<Course> courses= courseDao.getAllCourses();
 
-        List<Course> courses= courseDao.queryCourseByPage(30,11);
+        /*List<Course> courses= courseDao.queryCourseByPage(30,11);*/
 
         if (courses.isEmpty()){
             return null;
@@ -360,7 +360,7 @@ public class CourseServiceImpl implements CourseService {
             maps.add(map);
         }*/
 
-        return maps;
+        return courses;
     }
 
 

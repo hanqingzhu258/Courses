@@ -243,17 +243,17 @@ public class CourseController {
     */
     @ResponseBody
     @RequestMapping(value = "/getAllCourses",method = RequestMethod.GET)
-    public Result<List<Map>> getAllCourses(){
+    public Result<List<Course>> getAllCourses(){
 
-        List<Map> maps;
+        List<Course> courses;
         try {
-            maps=courseService.getAllCourses();
+            courses=courseService.getAllCourses();
         }catch(Exception e){
             e.printStackTrace();
             return new Result<>(false,"查询失败",null);
         }
 
-        return new Result<>(true,"查询成功",maps);
+        return new Result<>(true,"查询成功",courses);
     }
 
     /**

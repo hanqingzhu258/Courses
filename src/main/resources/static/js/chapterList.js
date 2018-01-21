@@ -1,4 +1,14 @@
 var modalEditor;
+
+var course_id = "";
+var cooks = document.cookie.split(";");
+for (var i = 0; i < cooks.length; i++) {
+    var index = cooks[i].indexOf("course_id");
+    if (index > -1) {
+        course_id = cooks[i].split("=")[1];
+    }
+}
+
 $(document).ready(function() {
 
        showChapterList();
@@ -102,7 +112,7 @@ function retrieveChapters(url, aoData, fnCallback) {
         cache: false,
         url: url,//这个就是请求地址对应sAjaxSource
         data: JSON.stringify({
-            "course_id": "1",
+            "course_id": course_id,
             "iDisplayStart": aoData[3].value,
             "iDisplayLength": aoData[4].value
         }),

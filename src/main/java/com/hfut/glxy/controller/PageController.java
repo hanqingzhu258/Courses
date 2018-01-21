@@ -35,7 +35,7 @@ public class PageController {
      * @condition 从数据库获取全部课程信息，返回前台登录页面，供用户选择登录
      * @since JDK 1.8
      */
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public Result<List<Map>> returnCourses() {
         List<Map> maps;
@@ -46,7 +46,7 @@ public class PageController {
             return new Result<>(false, "课程获取失败", null);
         }
         return new Result<>(true, "课程获取成功", maps);
-    }
+    }*/
     /**
      * @Author: yanni
      * @Description:超级管理员
@@ -97,10 +97,7 @@ public class PageController {
     public String superadminWelcome() {
         return "/superadmin/superwelcome";
     }
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
-        return "/superadmin/login";
-    }
+
     /**
      * @Author: yanni
      * @Description: 普通管理员
@@ -161,8 +158,52 @@ public class PageController {
     @RequestMapping(value = "/adminwelcome", method = RequestMethod.GET)
     public String adminwelcome() {
         return "/admin/adminwelcome";
+    }  @RequestMapping(value = "/addComment", method = RequestMethod.GET)
+    public String addComment() {
+        return "/admin/addComment";
+    } @RequestMapping(value = "/commentList", method = RequestMethod.GET)
+    public String commentList() {
+        return "/admin/commentList";
+    }
+    /**
+     * @Author: yanni
+     * @Description:登录界面
+     * @Date: 18:13 2018/1/20
+     * @Modified By:
+     * @Params: * @param null
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "/login/login";
     }
 
+    /**
+     * @Author: yanni
+     * @Description: 学生端
+     * @Date: 14:33 2018/1/11
+     * @Modified By:
+     * @Params: * @param null
+     */
+    @RequestMapping(value = "/home", method = RequestMethod.GET)
+    public String home() {
+        return "/student/index";
+    }
+    @RequestMapping(value = "/course", method = RequestMethod.GET)
+    public String course() {
+        return "/student/course2";
+    }
+    @RequestMapping(value = "/video", method = RequestMethod.GET)
+    public String video() {
+        return "/student/video";
+    }
+    @RequestMapping(value = "/person", method = RequestMethod.GET)
+    public String person() {
+        return "/student/person";
+    }
+    @RequestMapping(value = "/teachers", method = RequestMethod.GET)
+    public String teachers() {
+        return "/student/teachers";
+    }
 
 }
 

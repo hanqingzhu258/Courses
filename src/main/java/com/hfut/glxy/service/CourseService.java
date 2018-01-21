@@ -74,7 +74,7 @@ public interface CourseService {
          * @since JDK 1.8
          * @condition 获取全部课程
     */
-    List<Map> getAllCourses() throws Exception;
+    List<Course> getAllCourses() throws Exception;
 
     /**
          *

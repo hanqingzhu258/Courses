@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 function addInformation() {
     $.ajax({
-        url: 'http://3y5z5q.natappfree.cc/notice',
+        url: '/notice',
         type: 'post',
         dataType: 'json',
         timeout: 5000,

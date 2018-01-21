@@ -94,7 +94,7 @@ $(document).ready(function () {
 function showInfodetails(infoid) {
 
     $.ajax({
-        url: 'http://3y5z5q.natappfree.cc/notice/'+infoid,
+        url: '/notice/'+infoid,
         type: 'get',
         dataType: 'json',
         timeout: 5000,
@@ -122,7 +122,7 @@ function showInfodetails(infoid) {
 
 function changeInformation() {
     $.ajax({
-        url: 'http://3y5z5q.natappfree.cc/notice',
+        url: '/notice',
         type: 'put',
         dataType: 'json',
         timeout: 5000,

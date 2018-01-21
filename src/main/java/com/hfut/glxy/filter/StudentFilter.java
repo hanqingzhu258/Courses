@@ -1,3 +1,4 @@
+
 package com.hfut.glxy.filter;
 
 import org.springframework.web.filter.GenericFilterBean;
@@ -11,11 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+
 /**
  * @author chenliangliang
  * @date: 2017/11/29
- */
-/*//@WebFilter(urlPatterns = {"/comment/student","/comment/student/*"})
+ *//*
+
+*/
+
+@WebFilter(urlPatterns = {"/comment/student","/comment/student/*"})
 public class StudentFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -36,4 +41,4 @@ public class StudentFilter extends GenericFilterBean {
         }
         filterChain.doFilter(servletRequest,servletResponse);
     }
-}*/
+}

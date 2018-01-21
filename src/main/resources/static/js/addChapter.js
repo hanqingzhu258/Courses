@@ -1,5 +1,15 @@
 var editor;
 var modalEditor;
+
+var course_id = "";
+var cooks = document.cookie.split(";");
+for (var i = 0; i < cooks.length; i++) {
+    var index = cooks[i].indexOf("course_id");
+    if (index > -1) {
+        course_id = cooks[i].split("=")[1];
+    }
+}
+
 $(document).ready(function () {
     'use strict';
     $('[data-toggle="popover"]').popover()
@@ -13,7 +23,6 @@ $(document).ready(function () {
     modalEditor = new E('#showEditor');
     modalEditor.create();
 
-    /*     console.log(editor.txt.html());*/
 });
 
 /**
@@ -35,7 +44,7 @@ function addChapterTo() {
         data: JSON.stringify({
             "number": $("#selectChapterNumber").val(),
             "name": $("#selectTitle").val(),
-            "course_id": "1" //$.session.get('key');
+            "course_id": course_id
         })
     })
     /**

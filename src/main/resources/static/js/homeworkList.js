@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.ajax({
-        url: 'http://3y5z5q.natappfree.cc/homework/1',
+        url: '/homework/1',
         type: 'get',
         dataType: 'json',
         timeout: 5000,
@@ -113,7 +113,7 @@ $(document).ready(function () {
 function delHomework(id) {
 
     $.ajax({
-        url: 'http://3y5z5q.natappfree.cc/homework/'+id,
+        url: '/homework/'+id,
         type: 'post',
         dataType: 'json',
         data:JSON.stringify({
